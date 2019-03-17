@@ -1,0 +1,66 @@
+package application;
+
+import java.net.URL;
+import java.util.ResourceBundle;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+
+/**
+ *
+ * @author Marek Oleksik
+ */
+public class FXMLCheckersBoardController implements Initializable {
+
+	private double boardHeight;
+	private double boardWidth;
+
+	@FXML
+	private AnchorPane anchorPane;
+	@FXML
+	private VBox vBox;
+
+	@Override
+	public void initialize(URL url, ResourceBundle rb) {
+
+	}
+
+	public void ready(Scene scene) {
+		// Create change listener for width/height
+		ChangeListener<Number> sizeChangeListener = (ObservableValue<? extends Number> observable, Number oldValue,
+				final Number newValue) -> {
+			setGameBoard();
+		};
+
+		// Add change listeners to scene
+		scene.widthProperty().addListener(sizeChangeListener);
+		scene.heightProperty().addListener(sizeChangeListener);
+
+		setGameBoard();
+	}
+
+	public void setGameBoard() {
+		boardWidth = vBox.getWidth();
+		boardHeight = vBox.getHeight();
+
+		// Generate new gameboard
+		Checkerboard checkerboard = new Checkerboard(boardWidth, boardHeight);
+		AnchorPane gameboard = checkerboard.build();
+
+		// Clear previous gameboard
+		anchorPane.getChildren().clear();
+
+		// Set new gameboard configuration
+		anchorPane.getChildren().addAll(gameboard);
+	}
+}
