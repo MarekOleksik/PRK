@@ -14,7 +14,7 @@ public class Main extends Application {
 
 	@Override
 	public void start(Stage stage) throws Exception {
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("/application/FXML_Files/FXMLCheckersBoard.fxml"));
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML_Files/FXMLCheckersBoard.fxml"));
 		Parent root = loader.load();
 
 		FXMLCheckersBoardController controller = loader.getController();

@@ -13,3 +13,10 @@
 1552832173371	Move file
 1552832409630	Delete element
 1552849936736	Move compilation unit
+1552853918098	Delete element
+1552853955771	Move file
+1552853962046	Move file
+1552853966182	Delete element
+1552854001037	Delete element
+1552855608367	Encapsulate field 'rectangleSize'
+1552857746791	Rename type 'Checkerboard'

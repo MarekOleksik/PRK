@@ -1,6 +1,6 @@
 package Controllers;
 
-import application.Checkerboard;
+import application.CheckersBoard;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -42,7 +42,7 @@ public class FXMLCheckersBoardController {
 		boardHeight = vBox.getHeight();
 
 		// Generate new gameboard
-		Checkerboard checkerboard = new Checkerboard(boardWidth, boardHeight);
+		CheckersBoard checkerboard = new CheckersBoard(boardWidth, boardHeight);
 		AnchorPane gameboard = checkerboard.build();
 
 		// Clear previous gameboard
