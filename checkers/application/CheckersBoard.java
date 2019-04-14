@@ -96,6 +96,7 @@ public class CheckersBoard {
 	}
 
 	private MoveResult tryMove(Piece piece, int newX, int newY) {
+
 		if (board[newX][newY].hasPiece() || (newX + newY) % 2 == 0) {
 			return new MoveResult(MoveType.NONE);
 		}
@@ -103,21 +104,76 @@ public class CheckersBoard {
 		int x0 = toBoard(piece.getOldX());
 		int y0 = toBoard(piece.getOldY());
 
-		if (Math.abs(newX - x0) == 1 && newY - y0 == piece.getType().moveDir) {
-			return new MoveResult(MoveType.NORMAL);
-		} else if (Math.abs(newX - x0) == 2 && newY - y0 == piece.getType().moveDir * 2) {
+		System.out.println("x = " + newX + " y = " + newY);
 
-			int x1 = x0 + (newX - x0) / 2;
-			int y1 = y0 + (newY - y0) / 2;
+		if (!piece.isKing()) {
+			if (piece.getType().equals(PieceType.RED) && Math.abs(newX - x0) == 1
+					&& newY - y0 == piece.getType().moveDir) {
+				if (newY == 7) {
+					piece.makeKing();
+				}
+				// redPlayer.isRedTurn =false;
+				return new MoveResult(MoveType.NORMAL);
+			} else if (piece.getType().equals(PieceType.WHITE) && Math.abs(newX - x0) == 1
+					&& newY - y0 == piece.getType().moveDir) {
+				if (newY == 1) {
+					piece.makeKing();
+					System.out.println("Bia³y król" + piece.isKing());
+				}
+				// redPlayer.isRedTurn =true;
+				return new MoveResult(MoveType.NORMAL);
 
-			if (board[x1][y1].hasPiece() && board[x1][y1].getPiece().getType() != piece.getType()) {
-				return new MoveResult(MoveType.KILL, board[x1][y1].getPiece());
+			} else if (Math.abs(newX - x0) == 2 && newY - y0 == piece.getType().moveDir * 2) {
+
+				int x1 = x0 + (newX - x0) / 2;
+				int y1 = y0 + (newY - y0) / 2;
+
+				if (board[x1][y1].hasPiece() && board[x1][y1].getPiece().getType() != piece.getType()) {
+					return new MoveResult(MoveType.KILL, board[x1][y1].getPiece());
+				}
+			}
+
+		}
+
+		else {
+			if (piece.getType().equals(PieceType.RED) && Math.abs(newX - x0) == 1) {
+				return new MoveResult(MoveType.NORMAL);
+			} else if (piece.getType().equals(PieceType.WHITE) && Math.abs(newX - x0) == 1) {
+				return new MoveResult(MoveType.NORMAL);
+			} else if (Math.abs(newX - x0) == 2 && newY - y0 == piece.getType().moveDir * 2) {
+				int x1 = x0 + (newX - x0) / 2;
+				int y1 = y0 + (newY - y0) / 2;
+
+				if (board[x1][y1].hasPiece() && board[x1][y1].getPiece().getType() != piece.getType()) {
+					return new MoveResult(MoveType.KILL, board[x1][y1].getPiece());
+				}
+			} else {
+				return new MoveResult(MoveType.NONE);
 			}
 		}
 
 		return new MoveResult(MoveType.NONE);
 	}
 
+	/*
+	 * private MoveResult tryMove(Piece piece, int newX, int newY) { if
+	 * (board[newX][newY].hasPiece() || (newX + newY) % 2 == 0) { return new
+	 * MoveResult(MoveType.NONE); }
+	 * 
+	 * int x0 = toBoard(piece.getOldX()); int y0 = toBoard(piece.getOldY());
+	 * 
+	 * if (Math.abs(newX - x0) == 1 && newY - y0 == piece.getType().moveDir) {
+	 * return new MoveResult(MoveType.NORMAL); } else if (Math.abs(newX - x0) == 2
+	 * && newY - y0 == piece.getType().moveDir * 2) {
+	 * 
+	 * int x1 = x0 + (newX - x0) / 2; int y1 = y0 + (newY - y0) / 2;
+	 * 
+	 * if (board[x1][y1].hasPiece() && board[x1][y1].getPiece().getType() !=
+	 * piece.getType()) { return new MoveResult(MoveType.KILL,
+	 * board[x1][y1].getPiece()); } }
+	 * 
+	 * return new MoveResult(MoveType.NONE); }
+	 */
 	private int toBoard(double pixel) {
 		return (int) ((pixel + rectangleSize / 2) / rectangleSize);
 	}

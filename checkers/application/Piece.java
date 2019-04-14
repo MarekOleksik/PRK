@@ -14,6 +14,10 @@ public class Piece extends StackPane{
 
 	private double mouseX, mouseY;
 	private double oldX, oldY;
+	
+	private boolean isKing;
+	private final Color LIGHTPIECE = Color.valueOf("white");
+	private final Color DARKPIECE = Color.valueOf("red");
 
 	public PieceType getType() {
 		return type;
@@ -32,7 +36,7 @@ public class Piece extends StackPane{
 		this.tileSize = tileSize;
 
 		move(x, y);
-
+/*
 		Ellipse bg = new Ellipse(tileSize * 0.3125, tileSize * 0.26);
 		bg.setFill(Color.BLACK);
 
@@ -52,7 +56,8 @@ public class Piece extends StackPane{
 		ellipse.setTranslateY((tileSize - tileSize * 0.26 * 2) / 2);
 
 		getChildren().addAll(bg, ellipse);
-
+*/
+		drawPiece(type, tileSize);
 		setOnMousePressed(e -> {
 			mouseX = e.getSceneX();
 			mouseY = e.getSceneY();
@@ -72,4 +77,71 @@ public class Piece extends StackPane{
 	public void abortMove() {
 		relocate(oldX, oldY);
 	}
+
+	public boolean isKing() {
+		// TODO Auto-generated method stub
+		return isKing;
+	}
+
+	public void setKing(boolean isKing) {
+		this.isKing = isKing;
+	}
+
+	public void makeKing() {
+		// TODO Auto-generated method stub
+		isKing = true;
+	}
+	public void drawPiece(PieceType pieceColor, double tileSize) {
+		
+
+		if (isKing) {
+			drawKing(pieceColor, tileSize);
+			System.out.println("Isking z piece" + isKing);
+		} else {
+			drawEllipse(pieceColor, tileSize);
+		}
+
+
+
+
+
+}
+
+public void drawEllipse(PieceType pieceColor, double tileSize) {
+	Ellipse bg = new Ellipse(tileSize * 0.3125, tileSize * 0.26);
+	bg.setFill(Color.BLACK);
+
+	bg.setStroke(Color.BLACK);
+	bg.setStrokeWidth(tileSize * 0.03);
+
+	bg.setTranslateX((tileSize - tileSize * 0.3125 * 2) / 2);
+	bg.setTranslateY((tileSize - tileSize * 0.26 * 2) / 2 + tileSize * 0.07);
+
+	Ellipse ellipse = new Ellipse(tileSize * 0.3125, tileSize * 0.26);
+	ellipse.setFill(pieceColor == PieceType.RED ? DARKPIECE : LIGHTPIECE);
+
+	ellipse.setStroke(Color.BLACK);
+
+	ellipse.setStrokeWidth(tileSize * 0.03);
+
+	ellipse.setTranslateX((tileSize - tileSize * 0.3125 * 2) / 2);
+	ellipse.setTranslateY((tileSize - tileSize * 0.26 * 2) / 2);
+
+	getChildren().addAll(bg, ellipse);
+
+}
+
+public void drawKing(PieceType pieceColor, double tileSize) {
+	drawEllipse(pieceColor, tileSize);
+	Ellipse ellipse = new Ellipse(tileSize * 0.3125, tileSize * 0.26);
+	ellipse.setFill(pieceColor == PieceType.RED ? DARKPIECE : LIGHTPIECE);
+
+	ellipse.setStroke(Color.BLACK);
+
+	ellipse.setStrokeWidth(tileSize * 0.03);
+
+	ellipse.setTranslateX((tileSize - tileSize * 0.3125 * 2) / 2);
+	ellipse.setTranslateY((tileSize - tileSize * 0.35 * 2) / 2);
+	getChildren().add(ellipse);
+}
 }
