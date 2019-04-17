@@ -5,6 +5,6 @@
 <fullyQualifiedTypeName name="javafx.scene.Group"/>
 <fullyQualifiedTypeName name="javafx.scene.shape.Rectangle"/>
 <fullyQualifiedTypeName name="Controllers.FXMLCheckersBoardController"/>
-<fullyQualifiedTypeName name="application.CheckersBoard"/>
 <fullyQualifiedTypeName name="javafx.scene.shape.Line"/>
+<fullyQualifiedTypeName name="application.CheckersBoard"/>
 </qualifiedTypeNameHistroy>
