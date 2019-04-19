@@ -8,13 +8,12 @@ import javafx.scene.shape.Ellipse;
  *
  * @author Marek Oleksik
  */
-public class Piece extends StackPane{
+public class Piece extends StackPane {
 	private PieceType type;
 	private double tileSize;
 
 	private double mouseX, mouseY;
 	private double oldX, oldY;
-	
 	private boolean isKing;
 	private final Color LIGHTPIECE = Color.valueOf("white");
 	private final Color DARKPIECE = Color.valueOf("red");
@@ -36,7 +35,21 @@ public class Piece extends StackPane{
 		this.tileSize = tileSize;
 
 		move(x, y);
-/*
+
+		drawEllipse(type, tileSize);
+
+		setOnMousePressed(e -> {
+			mouseX = e.getSceneX();
+			mouseY = e.getSceneY();
+			System.out.println(mouseX + " + " + mouseY);
+		});
+
+		setOnMouseDragged(e -> {
+			relocate(e.getSceneX() - mouseX + oldX, e.getSceneY() - mouseY + oldY);
+		});
+	}
+
+	public void drawEllipse(PieceType type, double tileSize) {
 		Ellipse bg = new Ellipse(tileSize * 0.3125, tileSize * 0.26);
 		bg.setFill(Color.BLACK);
 
@@ -47,25 +60,31 @@ public class Piece extends StackPane{
 		bg.setTranslateY((tileSize - tileSize * 0.26 * 2) / 2 + tileSize * 0.07);
 
 		Ellipse ellipse = new Ellipse(tileSize * 0.3125, tileSize * 0.26);
-		ellipse.setFill(type == PieceType.RED ? Color.valueOf("#c40003") : Color.valueOf("#fff9f4"));
+		ellipse.setFill(type == PieceType.RED ? DARKPIECE : LIGHTPIECE);
 
 		ellipse.setStroke(Color.BLACK);
+
 		ellipse.setStrokeWidth(tileSize * 0.03);
 
 		ellipse.setTranslateX((tileSize - tileSize * 0.3125 * 2) / 2);
 		ellipse.setTranslateY((tileSize - tileSize * 0.26 * 2) / 2);
 
 		getChildren().addAll(bg, ellipse);
-*/
-		drawPiece(type, tileSize);
-		setOnMousePressed(e -> {
-			mouseX = e.getSceneX();
-			mouseY = e.getSceneY();
-		});
 
-		setOnMouseDragged(e -> {
-			relocate(e.getSceneX() - mouseX + oldX, e.getSceneY() - mouseY + oldY);
-		});
+	}
+
+	public void drawKing(PieceType type, double tileSize) {
+		drawEllipse(type, tileSize);
+		Ellipse ellipse = new Ellipse(tileSize * 0.3125, tileSize * 0.26);
+		ellipse.setFill(type == PieceType.RED ? DARKPIECE : LIGHTPIECE);
+
+		ellipse.setStroke(Color.BLACK);
+
+		ellipse.setStrokeWidth(tileSize * 0.03);
+
+		ellipse.setTranslateX((tileSize - tileSize * 0.3125 * 2) / 2);
+		ellipse.setTranslateY((tileSize - tileSize * 0.35 * 2) / 2);
+		getChildren().add(ellipse);
 	}
 
 	public void move(int x, int y) {
@@ -88,60 +107,13 @@ public class Piece extends StackPane{
 	}
 
 	public void makeKing() {
-		// TODO Auto-generated method stub
 		isKing = true;
-	}
-	public void drawPiece(PieceType pieceColor, double tileSize) {
-		
-
-		if (isKing) {
-			drawKing(pieceColor, tileSize);
-			System.out.println("Isking z piece" + isKing);
-		} else {
-			drawEllipse(pieceColor, tileSize);
+		drawKing(type, tileSize);
+		if (type == PieceType.RED) {
+			type = PieceType.KINGRED;
+		} else if (type == PieceType.WHITE) {
+			type = PieceType.KINGWHITE;
 		}
 
-
-
-
-
-}
-
-public void drawEllipse(PieceType pieceColor, double tileSize) {
-	Ellipse bg = new Ellipse(tileSize * 0.3125, tileSize * 0.26);
-	bg.setFill(Color.BLACK);
-
-	bg.setStroke(Color.BLACK);
-	bg.setStrokeWidth(tileSize * 0.03);
-
-	bg.setTranslateX((tileSize - tileSize * 0.3125 * 2) / 2);
-	bg.setTranslateY((tileSize - tileSize * 0.26 * 2) / 2 + tileSize * 0.07);
-
-	Ellipse ellipse = new Ellipse(tileSize * 0.3125, tileSize * 0.26);
-	ellipse.setFill(pieceColor == PieceType.RED ? DARKPIECE : LIGHTPIECE);
-
-	ellipse.setStroke(Color.BLACK);
-
-	ellipse.setStrokeWidth(tileSize * 0.03);
-
-	ellipse.setTranslateX((tileSize - tileSize * 0.3125 * 2) / 2);
-	ellipse.setTranslateY((tileSize - tileSize * 0.26 * 2) / 2);
-
-	getChildren().addAll(bg, ellipse);
-
-}
-
-public void drawKing(PieceType pieceColor, double tileSize) {
-	drawEllipse(pieceColor, tileSize);
-	Ellipse ellipse = new Ellipse(tileSize * 0.3125, tileSize * 0.26);
-	ellipse.setFill(pieceColor == PieceType.RED ? DARKPIECE : LIGHTPIECE);
-
-	ellipse.setStroke(Color.BLACK);
-
-	ellipse.setStrokeWidth(tileSize * 0.03);
-
-	ellipse.setTranslateX((tileSize - tileSize * 0.3125 * 2) / 2);
-	ellipse.setTranslateY((tileSize - tileSize * 0.35 * 2) / 2);
-	getChildren().add(ellipse);
-}
+	}
 }
