@@ -7,4 +7,6 @@
 <fullyQualifiedTypeName name="Controllers.FXMLCheckersBoardController"/>
 <fullyQualifiedTypeName name="javafx.scene.shape.Line"/>
 <fullyQualifiedTypeName name="application.CheckersBoard"/>
+<fullyQualifiedTypeName name="javax.swing.JOptionPane"/>
+<fullyQualifiedTypeName name="java.util.Scanner"/>
 </qualifiedTypeNameHistroy>
