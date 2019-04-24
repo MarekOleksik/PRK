@@ -9,4 +9,5 @@
 <fullyQualifiedTypeName name="application.CheckersBoard"/>
 <fullyQualifiedTypeName name="javax.swing.JOptionPane"/>
 <fullyQualifiedTypeName name="java.util.Scanner"/>
+<fullyQualifiedTypeName name="application.PieceType"/>
 </qualifiedTypeNameHistroy>

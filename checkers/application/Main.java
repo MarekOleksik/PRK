@@ -23,7 +23,8 @@ public class Main extends Application {
 		FXMLCheckersBoardController controller = loader.getController();
 
 		Scene scene = new Scene(root);
-
+		stage.setWidth(600);
+		stage.setHeight(600);
 		stage.setScene(scene);
 		stage.show();
 
