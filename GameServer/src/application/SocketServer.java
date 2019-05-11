@@ -15,8 +15,8 @@ public class SocketServer {
 
 	private static final int PORT = 9001;
 	private static ArrayList<String> users = new ArrayList<String>();
-	private static String player1 = "";
-	private static String player2 = "";
+	private static String playerWhite = "";
+	private static String playerRed = "";
 	private static String board = "";
 	private static ConcurrentHashMap<Integer, PrintWriter> clients = new ConcurrentHashMap<Integer, PrintWriter>();
 
@@ -66,8 +66,8 @@ public class SocketServer {
 				System.out.println("UID" + String.valueOf(id));
 
 				sendUsers();
-				outputPrintWriter.println(player1);
-				outputPrintWriter.println(player2);
+				outputPrintWriter.println(playerWhite);
+				outputPrintWriter.println(playerRed);
 				if (!board.equals("")){
 				outputPrintWriter.println(board);
 				}
@@ -84,18 +84,22 @@ public class SocketServer {
 						clientMsg = clientMsg.substring(3);
 						// Wysłanie wiadomości (MSG)
 						sendToAll("MSG" + id + "\t" + name + "\t" + picID + "\t" + clientMsg);
-					} else if (clientMsg.startsWith("SIT1")) {
+					} else if (clientMsg.startsWith("SIT_WHITE")) {
 						sendToAll("SIT" + id + "\t" + name + "\t" + picID + "\t" + clientMsg);
-						player1 = "SIT" + id + "\t" + name + "\t" + picID + "\t" + clientMsg;
-					} else if (clientMsg.startsWith("SIT2")) {
+						playerWhite = "SIT" + id + "\t" + name + "\t" + picID + "\t" + clientMsg;
+					} else if (clientMsg.startsWith("SIT_RED")) {
 						sendToAll("SIT" + id + "\t" + name + "\t" + picID + "\t" + clientMsg);
-						player2 = "SIT" + id + "\t" + name + "\t" + picID + "\t" + clientMsg;
-					} else if (clientMsg.startsWith("STAND1")) {
+						playerRed = "SIT" + id + "\t" + name + "\t" + picID + "\t" + clientMsg;
+					} else if (clientMsg.startsWith("STAND_WHITE")) {
 						sendToAll("STAND" + id + "\t" + name + "\t" + picID + "\t" + clientMsg);
-						player1 = "";
-					} else if (clientMsg.startsWith("STAND2")) {
+						playerWhite = "";
+					} else if (clientMsg.startsWith("STAND_RED")) {
 						sendToAll("STAND" + id + "\t" + name + "\t" + picID + "\t" + clientMsg);
-						player2 = "";
+						playerRed = "";
+					} else if (clientMsg.startsWith("MOVE")) {
+						sendToAll(clientMsg);
+					} else if (clientMsg.startsWith("NEXT")) {
+						sendToAll(clientMsg);
 					} else if (clientMsg.startsWith("BRD")) {
 						sendToAll(clientMsg);
 						board=clientMsg;
@@ -124,22 +128,22 @@ public class SocketServer {
 		}
 
 		private void ifPlayerWasSitting() {
-			if (!player1.equals("")) {
-				String temp = player1.substring(3);
+			if (!playerWhite.equals("")) {
+				String temp = playerWhite.substring(3);
 				String[] param = temp.split("\t");
 				if (param[0].equals(String.valueOf(id))) {
-					sendToAll("STAND" + id + "\t" + name + "\t" + picID + "\t" + "STAND1");
-					player1 = "";
-					System.out.println("aaa " + player1);
+					sendToAll("STAND" + id + "\t" + name + "\t" + picID + "\t" + "STAND_WHITE");
+					playerWhite = "";
+					System.out.println("aaa " + playerWhite);
 				}
 
 			}
-			if (!player2.equals("")) {
-				String temp = player2.substring(3);
+			if (!playerRed.equals("")) {
+				String temp = playerRed.substring(3);
 				String[] param = temp.split("\t");
 				if (param[0].equals(String.valueOf(id))) {
-					sendToAll("STAND" + id + "\t" + name + "\t" + picID + "\t" + "STAND2");
-					player2 = "";
+					sendToAll("STAND" + id + "\t" + name + "\t" + picID + "\t" + "STAND_RED");
+					playerRed = "";
 				}
 
 			}
