@@ -7,13 +7,18 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.parser.Parser;
 
+import application.AlertBox;
 import application.CheckersBoard;
+import application.Player;
+import application.Sender;
+import application.User;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -22,10 +27,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -35,52 +43,43 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.web.WebView;
 
+/**
+ *
+ * @author Krzysztof Jagodziński
+ */
 public class GameController {
 	@FXML
-	TextField messageTextField;
+	private TextField messageTextField;
 	@FXML
-	Label welcomeLabel;
+	private Label welcomeLabel;
 	@FXML
-	WebView webViewMessages;
+	private WebView webViewMessages;
 	@FXML
-	Circle circleImage;
+	private Circle circleImage;
 	@FXML
-	ImageView sendImageView;
+	private ImageView sendImageView;
 	@FXML
-	ListView<String> userListView;
+	private ListView<String> userListView;
 	@FXML
-	Circle player1Image;
+	private Circle playerWhiteImage;
 	@FXML
-	Circle player2Image;
+	private Circle playerRedImage;
 	@FXML
-	CheckBox player1CheckBox;
+	private CheckBox playerWhiteCheckBox;
 	@FXML
-	CheckBox player2CheckBox;
+	private CheckBox playerRedCheckBox;
 	@FXML
-	Button testButton;
+	private Button testButton;
 	@FXML
-	Button testButton1;
+	private Tab tabChat;
 	@FXML
-	Button testButton2;
-
+	private Tab tabUsers;
 	@FXML
 	private AnchorPane anchorPane;
 
-	private double boardHeight;
-	private double boardWidth;
+	private double boardHeight = 600;
+	private double boardWidth = 600;
 
-	private String picID = "";
-	// nazwa obrazka wybrana przez użytkownika
-	private String userName = "";
-	// nazwa wybrana przez użytkownika
-	private int UID;
-	// identyfikator użytkownika nadany przez serwer
-	private String senderName;
-	// nazwa nadawcy wiadomości
-	private int senderUID;
-	// identyfikator nadawcy
-	private String senderPicID;
-	// nazwa obrazka nadawcy
 	private String host;
 	// adres serwera
 	private final int PORT = 9001;
@@ -91,17 +90,28 @@ public class GameController {
 	// bufor wejściowy (dane odebrane z serwera)
 	public static PrintWriter outputPrintWriter;
 	// bufor wyjściowy (dane do wysłania)
-
+	private ArrayList<String> usersList = new ArrayList<String>();
 	Document messagesLayout;
+
+	// Generate new gameboard
+	private CheckersBoard checkerboard = new CheckersBoard(boardWidth, boardHeight);
+	private Player player = new Player();
+	private Sender sender = new Sender();
+	private User user = new User();
+	String PMSG_Recipient;
+	int PMSG_RecipientID;
 
 	@FXML
 	private void initialize() {
 
 		Image myImage = new Image(new File("res/avatars/bot.png").toURI().toString());
 		ImagePattern pattern = new ImagePattern(myImage);
-		player1Image.setFill(pattern);
-		player2Image.setFill(pattern);
-
+		playerWhiteImage.setFill(pattern);
+		playerRedImage.setFill(pattern);
+		player.setWhitePlayer(""); // Aby nie buło
+									// java.lang.NullPointerException
+		player.setRedPlayer(""); // Aby nie buło java.lang.NullPointerException
+		player.setRedTurn(false);
 		String welcome = "Witaj w grze. Wybierz wolne miejsce.";
 		messagesLayout = Jsoup.parse("<html><head><meta charset='UTF-8'>"
 				+ "</head><body><ul><li class=\"welcome\"><div class=\"message\"><div class=\"content\">" + welcome
@@ -112,13 +122,13 @@ public class GameController {
 	}
 
 	public void setUserName(String userName) {
-		this.userName = userName;
-		welcomeLabel.setText("Witaj " + this.userName + "!");
+		user.setUserName(userName);
+		welcomeLabel.setText("Witaj " + userName + "!");
 	}
 
 	public void setPicID(String picID) {
-		this.picID = picID;
-		Image myImage = new Image(new File("res/avatars/" + this.picID).toURI().toString());
+		user.setPicID(picID);
+		Image myImage = new Image(new File("res/avatars/" + picID).toURI().toString());
 		ImagePattern pattern = new ImagePattern(myImage);
 		circleImage.setFill(pattern);
 	}
@@ -129,10 +139,6 @@ public class GameController {
 
 	public void setHost(String host) {
 		this.host = host;
-	}
-
-	public String getUserName() {
-		return userName;
 	}
 
 	public void run() throws UnknownHostException, IOException {
@@ -146,18 +152,24 @@ public class GameController {
 					String msg = inputBufferedReader.readLine();
 					System.out.println(msg);
 					if (msg.startsWith("RDY")) {
-						outputPrintWriter.println(userName);
-						outputPrintWriter.println(picID);
+						outputPrintWriter.println(user.getUserName());
+						outputPrintWriter.println(user.getPicID());
 					} else if (msg.startsWith("UID")) {
-						UID = Integer.parseInt(msg.substring(3));
+						user.setUID(Integer.parseInt(msg.substring(3)));
 					} else if (msg.startsWith("MSG")) {
 						addMessage(toHTML(decodeUID(msg)));
+					} else if (msg.startsWith("PMSG")) {
+						addMessage(toHTML_PMSG(decodeUID_PMSG(msg)));
 					} else if (msg.startsWith("[")) {
 						updateUserList(msg);
 					} else if (msg.startsWith("SIT")) {
 						updateUserSit(msg);
 					} else if (msg.startsWith("STAND")) {
 						updateUserStand(msg);
+					} else if (msg.startsWith("MOVE")) {
+						setActiveUser(msg);
+					} else if (msg.startsWith("NEXT")) {
+						updateActiveUser();
 					} else if (msg.startsWith("BRD")) {
 						setBoardString(msg);
 					}
@@ -194,13 +206,42 @@ public class GameController {
 				// Generate new gameboard
 				CheckersBoard checkerboard = new CheckersBoard(boardWidth, boardHeight);
 				AnchorPane gameboard = checkerboard.fill();
-			anchorPane.getChildren().clear();
+				anchorPane.getChildren().clear();
 				anchorPane.getChildren().addAll(gameboard);
 			}
 		});
 	}
 
+	private void updateActiveUser() {
+
+		if (player.isRedTurn()) {
+			setActiveUser("MOVE_WHITE");
+			System.out.println("MOVE_WHITE");
+			player.setRedTurn(false);
+		} else {
+			setActiveUser("MOVE_RED");
+			player.setRedTurn(true);
+			System.out.println("MOVE_WHITE");
+		}
+
+	}
+
+	private void setActiveUser(String msg) {
+		msg = msg.substring(5);
+		if ((msg.equals("RED") && player.getRedPlayer().equals(user.getUserName() + user.getUID()))) {
+			player.setRedTurn(true);
+			anchorPane.setDisable(false);
+		} else if ((msg.equals("WHITE") && player.getWhitePlayer().equals(user.getUserName() + user.getUID()))) {
+			player.setRedTurn(false);
+			anchorPane.setDisable(false);
+		} else {
+			anchorPane.setDisable(true);
+		}
+
+	}
+
 	private void updateUserList(String msg) {
+		usersList.clear();
 		msg = msg.substring(1);
 		msg = msg.substring(0, msg.length() - 1);
 		String[] user = msg.split(", ");
@@ -213,6 +254,7 @@ public class GameController {
 			public void run() {
 				userListView.getItems().clear();
 				for (int i = 0; i < user.length; i++) {
+					usersList.add(user[i]);
 					String[] param = user[i].split("\t");
 					userListView.getItems().add(param[1]);
 				}
@@ -225,34 +267,34 @@ public class GameController {
 		msg = msg.substring(3);
 		String[] param = msg.split("\t");
 
-		if (param[3].equals("SIT1") && !param[0].equals(String.valueOf(UID))) {
+		if (param[3].equals("SIT_WHITE") && !param[0].equals(String.valueOf(user.getUID()))) {
 
 			Platform.runLater(new Runnable() { // Aby nie wywoływać Not on FX
 												// application thread;
 												// currentThread=Thread-5
 				@Override
 				public void run() {
-					player1CheckBox.setText(param[1]);
-					player1CheckBox.setDisable(true);
+					playerWhiteCheckBox.setText(param[1]);
+					playerWhiteCheckBox.setDisable(true);
 				}
 			});
 			Image myImage = new Image(new File("res/avatars/" + param[2]).toURI().toString());
 			ImagePattern pattern = new ImagePattern(myImage);
-			player1Image.setFill(pattern);
+			playerWhiteImage.setFill(pattern);
 		}
-		if (param[3].equals("SIT2") && !param[0].equals(String.valueOf(UID))) {
+		if (param[3].equals("SIT_RED") && !param[0].equals(String.valueOf(user.getUID()))) {
 			Platform.runLater(new Runnable() {
 
 				@Override
 				public void run() {
-					player2CheckBox.setText(param[1]);
-					player2CheckBox.setDisable(true);
+					playerRedCheckBox.setText(param[1]);
+					playerRedCheckBox.setDisable(true);
 				}
 			});
 
 			Image myImage = new Image(new File("res/avatars/" + param[2]).toURI().toString());
 			ImagePattern pattern = new ImagePattern(myImage);
-			player2Image.setFill(pattern);
+			playerRedImage.setFill(pattern);
 		}
 
 	}
@@ -261,50 +303,50 @@ public class GameController {
 		msg = msg.substring(5);
 		String[] param = msg.split("\t");
 
-		if (param[3].equals("STAND1") && !param[0].equals(String.valueOf(UID))) {
+		if (param[3].equals("STAND_WHITE") && !param[0].equals(String.valueOf(user.getUID()))) {
 
 			Platform.runLater(new Runnable() { // Aby nie wywoływać Not on FX
 												// application thread;
 												// currentThread=Thread-5
 				@Override
 				public void run() {
-					player1CheckBox.setText("Gracz1");
-					if (!player2CheckBox.getText().equals(userName)) { // Czy
-																		// gracz
-																		// nie
-																		// siedzi
-																		// na
-																		// drugim
-																		// miejscu
-						player1CheckBox.setDisable(false);
+					playerWhiteCheckBox.setText("Gracz biały");
+					if (!playerRedCheckBox.getText().equals(user.getUserName())) { // Czy
+						// gracz
+						// nie
+						// siedzi
+						// na
+						// drugim
+						// miejscu
+						playerWhiteCheckBox.setDisable(false);
 					}
 				}
 			});
 			Image myImage = new Image(new File("res/avatars/bot.png").toURI().toString());
 			ImagePattern pattern = new ImagePattern(myImage);
-			player1Image.setFill(pattern);
+			playerWhiteImage.setFill(pattern);
 		}
-		if (param[3].equals("STAND2") && !param[0].equals(String.valueOf(UID))) {
+		if (param[3].equals("STAND_RED") && !param[0].equals(String.valueOf(user.getUID()))) {
 			Platform.runLater(new Runnable() {
 
 				@Override
 				public void run() {
-					player2CheckBox.setText("Gracz2");
-					if (!player1CheckBox.getText().equals(userName)) { // Czy
-																		// gracz
-																		// nie
-																		// siedzi
-																		// na
-																		// drugim
-																		// miejscu
-						player2CheckBox.setDisable(false);
+					playerRedCheckBox.setText("Gracz czerwony");
+					if (!playerWhiteCheckBox.getText().equals(user.getUserName())) { // Czy
+						// gracz
+						// nie
+						// siedzi
+						// na
+						// drugim
+						// miejscu
+						playerRedCheckBox.setDisable(false);
 					}
 				}
 			});
 
 			Image myImage = new Image(new File("res/avatars/bot.png").toURI().toString());
 			ImagePattern pattern = new ImagePattern(myImage);
-			player2Image.setFill(pattern);
+			playerRedImage.setFill(pattern);
 		}
 
 	}
@@ -313,8 +355,16 @@ public class GameController {
 	private void sendImageView_MouseReleased() {
 		if (messageTextField.getLength() == 0)
 			return;
-		outputPrintWriter.println("MSG" + messageTextField.getText());
-		messageTextField.clear();
+		if (tabUsers.isSelected()) { // Wiadomość prywatna
+			usersList.get(userListView.getSelectionModel().getSelectedIndex());
+			outputPrintWriter.println("PMSG" + usersList.get(userListView.getSelectionModel().getSelectedIndex()) + "\t"
+					+ messageTextField.getText());
+			messageTextField.clear();
+		}
+		if (tabChat.isSelected()) { // Wiadomość
+			outputPrintWriter.println("MSG" + messageTextField.getText());
+			messageTextField.clear();
+		}
 	}
 
 	@FXML
@@ -336,13 +386,13 @@ public class GameController {
 
 	private Element toHTML(String message) {
 		System.out.println("toHTML:" + message);
-		String msgClass = (UID == senderUID) ? "request" : "response";
+		String msgClass = (user.getUID() == sender.getSenderUID()) ? "request" : "response";
 		Element wrapper = new Element("li").attr("class", msgClass);
 		Element image = new Element("img").attr("class", "avatar").attr("src",
-				new File("res/avatars/" + picID).toURI().toString());
-		if (UID != senderUID) {
-			image.attr("src", new File("res/avatars/" + senderPicID).toURI().toString());
-			new Element("span").attr("class", "author").append(senderName).appendTo(wrapper);
+				new File("res/avatars/" + user.getPicID()).toURI().toString());
+		if (user.getUID() != sender.getSenderUID()) {
+			image.attr("src", new File("res/avatars/" + sender.getSenderPicID()).toURI().toString());
+			new Element("span").attr("class", "author").append(sender.getSenderName()).appendTo(wrapper);
 		}
 		image.appendTo(wrapper);
 		Element message_div = new Element("div").attr("class", "message").appendTo(wrapper);
@@ -353,73 +403,122 @@ public class GameController {
 	private String decodeUID(String msg) {
 		msg = msg.substring(3);
 		String[] param = msg.split("\t");
-		this.senderUID = Integer.parseInt(param[0]);
-		this.senderName = param[1];
-		this.senderPicID = param[2];
+		sender.setSenderUID(Integer.parseInt(param[0]));
+		sender.setSenderName(param[1]);
+		sender.setSenderPicID(param[2]);
 		return msg.substring(param[0].length() + param[1].length() + param[2].length() + 3);
 	}
 
-	@FXML
-	void player1CheckBox_OnActrion(ActionEvent event) {
-		if (player1CheckBox.isSelected()) {
-			player1CheckBox.setText(userName);
-			player2CheckBox.setDisable(true);
-			outputPrintWriter.println("SIT" + 1);
-			Image myImage = new Image(new File("res/avatars/" + picID).toURI().toString());
-			ImagePattern pattern = new ImagePattern(myImage);
-			player1Image.setFill(pattern);
-		} else {
-			player1CheckBox.setText("Gracz1");
-			if (player2CheckBox.getText().equals("Gracz2")) { // Czy drugie
-																// miejsce jest
-																// puste
-				player2CheckBox.setDisable(false);
+	private Element toHTML_PMSG(String message) {
+		System.out.println("toHTML_PMSG:" + message);
+		String msgClass = (user.getUID() == sender.getSenderUID()) ? "request" : "response";
+		Element wrapper = new Element("li").attr("class", msgClass);
+		if (user.getUID() == sender.getSenderUID() || user.getUID() == PMSG_RecipientID) {
+			Element image = new Element("img").attr("class", "avatar").attr("src",
+					new File("res/avatars/" + user.getPicID()).toURI().toString());
+			if (user.getUID() != sender.getSenderUID() && user.getUID() == PMSG_RecipientID) {
+				image.attr("src", new File("res/avatars/" + sender.getSenderPicID()).toURI().toString());
+				new Element("span").attr("class", "author").append(sender.getSenderName()).appendTo(wrapper);
 			}
-			outputPrintWriter.println("STAND" + 1);
+			image.appendTo(wrapper);
+			Element message_div = new Element("div").attr("class", "message").appendTo(wrapper);
+			new Element("div").attr("class", "content").append(message).appendTo(message_div);
+			
+		} return wrapper;
+	}
+
+	private String decodeUID_PMSG(String msg) {
+		msg = msg.substring(4);
+		String[] param = msg.split("\t");
+
+		sender.setSenderUID(Integer.parseInt(param[0]));
+		sender.setSenderName(param[1]);
+		sender.setSenderPicID(param[2]);
+		PMSG_RecipientID = Integer.valueOf((param[3]));
+		PMSG_Recipient = (param[4]);
+		return "PRIV -> " + PMSG_Recipient + ": " + (param[5]);
+	}
+
+	@FXML
+	void playerWhiteCheckBox_OnActrion(ActionEvent event) {
+		if (playerWhiteCheckBox.isSelected()) {
+			playerWhiteCheckBox.setText(user.getUserName());
+			playerRedCheckBox.setDisable(true);
+			outputPrintWriter.println("SIT_WHITE");
+			player.setWhitePlayer(user.getUserName() + user.getUID());
+
+			Image myImage = new Image(new File("res/avatars/" + user.getPicID()).toURI().toString());
+			ImagePattern pattern = new ImagePattern(myImage);
+			playerWhiteImage.setFill(pattern);
+			if (!playerRedCheckBox.getText().equals("Gracz czerwony")) { // Czy
+																			// drugie
+																			// miejsce
+																			// jest
+																			// zajęte
+				newGame();
+			}
+		} else {
+			playerWhiteCheckBox.setText("Gracz biały");
+			if (playerRedCheckBox.getText().equals("Gracz czerwony")) { // Czy
+																		// drugie
+				// miejsce jest
+				// puste
+				playerRedCheckBox.setDisable(false);
+			}
+			player.setWhitePlayer("");
+			outputPrintWriter.println("STAND_WHITE");
 			Image myImage = new Image(new File("res/avatars/bot.png").toURI().toString());
 			ImagePattern pattern = new ImagePattern(myImage);
-			player1Image.setFill(pattern);
+			playerWhiteImage.setFill(pattern);
 		}
 
 	}
 
+	private void newGame() {
+		setGameBoard(); // nowa gra
+		outputPrintWriter.println("MOVE_WHITE");
+		checkerboard.setBoardServer();
+		outputPrintWriter.println("BRD" + convertBoardStringToString());
+	}
+
 	@FXML
-	void player2CheckBox_OnActrion(ActionEvent event) {
-		if (player2CheckBox.isSelected()) {
-			player2CheckBox.setText(userName);
-			player1CheckBox.setDisable(true);
-			outputPrintWriter.println("SIT" + 2);
-			Image myImage = new Image(new File("res/avatars/" + picID).toURI().toString());
+	void playerRedCheckBox_OnActrion(ActionEvent event) {
+		if (playerRedCheckBox.isSelected()) {
+			playerRedCheckBox.setText(user.getUserName());
+			playerWhiteCheckBox.setDisable(true);
+			player.setRedPlayer(user.getUserName() + user.getUID());
+			outputPrintWriter.println("SIT_RED");
+			Image myImage = new Image(new File("res/avatars/" + user.getPicID()).toURI().toString());
 			ImagePattern pattern = new ImagePattern(myImage);
-			player2Image.setFill(pattern);
-		} else {
-			player2CheckBox.setText("Gracz2");
-			if (player1CheckBox.getText().equals("Gracz1")) { // Czy drugie
-																// miejsce jest
-																// puste
-				player1CheckBox.setDisable(false);
+			playerRedImage.setFill(pattern);
+			if (!playerWhiteCheckBox.getText().equals("Gracz biały")) { // Czy
+																		// drugie
+																		// miejsce
+																		// jest
+																		// zajęte
+				newGame();
 			}
-			outputPrintWriter.println("STAND" + 2);
+		} else {
+			playerRedCheckBox.setText("Gracz czerwony");
+			if (playerWhiteCheckBox.getText().equals("Gracz biały")) { // Czy
+																		// drugie
+				// miejsce jest
+				// puste
+				playerWhiteCheckBox.setDisable(false);
+			}
+			player.setRedPlayer("");
+			outputPrintWriter.println("STAND_RED");
 			Image myImage = new Image(new File("res/avatars/bot.png").toURI().toString());
 			ImagePattern pattern = new ImagePattern(myImage);
-			player2Image.setFill(pattern);
+			playerRedImage.setFill(pattern);
 		}
 	}
 
 	@FXML
 	void testButton_Click(ActionEvent event) {
-		anchorPane.setDisable(false);
-		setGameBoard();
-	}
-
-	@FXML
-	void testButton2_Click(ActionEvent event) {
-
-	}
-
-	@FXML
-	void testButton3_Click(ActionEvent event) {
-
+	  	  if (AlertBox.showAndWait(AlertType.INFORMATION, "WARCABY", "WYGRANA!!!")
+					.orElse(ButtonType.CANCEL) == ButtonType.OK) {
+	  	  }
 	}
 
 	public static String convertBoardStringToString() {
@@ -444,15 +543,10 @@ public class GameController {
 		scene.widthProperty().addListener(sizeChangeListener);
 		scene.heightProperty().addListener(sizeChangeListener);
 
-		setGameBoard();
 	}
 
 	public void setGameBoard() {
-		boardWidth = 600;
-		boardHeight = 600;
 
-		// Generate new gameboard
-		CheckersBoard checkerboard = new CheckersBoard(boardWidth, boardHeight);
 		AnchorPane gameboard = checkerboard.build();
 
 		// Clear previous gameboard
@@ -460,6 +554,7 @@ public class GameController {
 
 		// Set new gameboard configuration
 		anchorPane.getChildren().addAll(gameboard);
+
 	}
 
 }

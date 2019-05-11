@@ -55,9 +55,7 @@ public class CheckersBoard {
 	public double getRectangleSize() {
 		return rectangleSize;
 	}
-	
-	
-	
+
 	public AnchorPane build() {
 		// Calculate the max width and height of the board squares using the
 		// smallest board dimension
@@ -132,6 +130,16 @@ public class CheckersBoard {
 					piece = makePiece(PieceType.WHITE, x, y);
 				}
 
+				if (boardString[x][y] != null && boardString[x][y].equals("KINGWHITE")) {
+					piece = makePiece(PieceType.WHITE, x, y);
+					piece.makeKing();
+				}
+
+				if (boardString[x][y] != null && boardString[x][y].equals("KINGRED")) {
+					piece = makePiece(PieceType.RED, x, y);
+					piece.makeKing();
+				}
+
 				if (piece != null) {
 					tile.setPiece(piece);
 					pieceGroup.getChildren().add(piece);
@@ -141,17 +149,19 @@ public class CheckersBoard {
 		return gameboard;
 	}
 
-	
-
 	private MoveResult tryMove(Piece piece, int newX, int newY) {
-		if (board[newX][newY].hasPiece() || (newX + newY) % 2 == 0) {
+
+		if (board[newX][newY].hasPiece() || (newX + newY) % 2 == 0 || newX > boardWidth || newY > boardHeight) {
 			return new MoveResult(MoveType.NONE);
 		}
 
 		int x0 = toBoard(piece.getOldX());
 		int y0 = toBoard(piece.getOldY());
 
-		System.out.println("x = " + newX + " y = " + newY);
+		System.out.println("x0= " + x0 + " y0= " + y0);
+		System.out.println("newx = " + newX + " newy = " + newY);
+
+		// piece is not King
 
 		if (!piece.isKing()) {
 			if (piece.getType().equals(PieceType.RED) && Math.abs(newX - x0) == 1
@@ -173,24 +183,36 @@ public class CheckersBoard {
 
 				int x1 = x0 + (newX - x0) / 2;
 				int y1 = y0 + (newY - y0) / 2;
+				System.out.println("x1= " + x1 + " y1= " + y1);
+				System.out.println("newY - y0 = " + (newY - y0));
 
 				if (board[x1][y1].hasPiece() && board[x1][y1].getPiece().getType() != piece.getType()) {
+					if ((newY == 7) && piece.getType().equals(PieceType.RED)
+							|| (newY == 0) && piece.getType().equals(PieceType.WHITE)) {
+						piece.makeKing();
+					}
 					return new MoveResult(MoveType.KILL, board[x1][y1].getPiece());
 				}
 			}
 
 		}
 
-		else {
-			if (piece.getType().equals(PieceType.KINGRED) && Math.abs(newX - x0) == 1) {
+		// piece is King
+
+		else if (piece.isKing()) {
+			if ((piece.getType().equals(PieceType.KINGRED) && Math.abs(newX - x0) == 1)
+					|| (piece.getType().equals(PieceType.KINGWHITE) && Math.abs(newX - x0) == 1)) {
 				return new MoveResult(MoveType.NORMAL);
-			} else if (piece.getType().equals(PieceType.KINGWHITE) && Math.abs(newX - x0) == 1) {
-				return new MoveResult(MoveType.NORMAL);
-			} else if (Math.abs(newX - x0) == 2 && newY - y0 == piece.getType().moveDir * 2) {
+			} else if (Math.abs(newX - x0) == 2) {
 				int x1 = x0 + (newX - x0) / 2;
 				int y1 = y0 + (newY - y0) / 2;
-
-				if (board[x1][y1].hasPiece() && board[x1][y1].getPiece().getType() != piece.getType()) {
+				if (board[x1][y1].hasPiece() && (((board[x1][y1].getPiece().getType().equals(PieceType.KINGRED)
+						|| board[x1][y1].getPiece().getType().equals(PieceType.RED))
+						&& (piece.getType().equals(PieceType.KINGWHITE) || piece.getType().equals(PieceType.WHITE)))
+						|| ((board[x1][y1].getPiece().getType().equals(PieceType.KINGWHITE)
+								|| board[x1][y1].getPiece().getType().equals(PieceType.WHITE))
+								&& (piece.getType().equals(PieceType.KINGRED)
+										|| piece.getType().equals(PieceType.RED))))) {
 					return new MoveResult(MoveType.KILL, board[x1][y1].getPiece());
 				}
 			} else {
@@ -232,8 +254,8 @@ public class CheckersBoard {
 				board[x0][y0].setPiece(null);
 				board[newX][newY].setPiece(piece);
 
-				setBoardServer();
-				GameController.outputPrintWriter.println("BRD" + GameController.convertBoardStringToString());
+				sendBoardToServerAfterMove();
+
 				break;
 			case KILL:
 				piece.move(newX, newY);
@@ -243,13 +265,20 @@ public class CheckersBoard {
 				Piece otherPiece = result.getPiece();
 				board[toBoard(otherPiece.getOldX())][toBoard(otherPiece.getOldY())].setPiece(null);
 				pieceGroup.getChildren().remove(otherPiece);
-				setBoardServer();
-				GameController.outputPrintWriter.println("BRD" + GameController.convertBoardStringToString());
+
+				sendBoardToServerAfterMove();
+
 				break;
 			}
 		});
 
 		return piece;
+	}
+
+	private void sendBoardToServerAfterMove() {
+		setBoardServer(); // Tworzy tablicę z aktualnymi pionkami
+		GameController.outputPrintWriter.println("BRD" + GameController.convertBoardStringToString()); // Konwertuje tablicę na String i wysyła go na serwer
+		GameController.outputPrintWriter.println("NEXT"); //Wysyła na serwer komendę zmiany gracza
 	}
 
 	public void setBoardServer() {
@@ -261,7 +290,6 @@ public class CheckersBoard {
 					boardString[row][col] = "";
 
 				}
-				// System.out.println(boardString[row][col]);
 			}
 		}
 	}

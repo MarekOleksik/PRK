@@ -1,8 +1,12 @@
 package application;
 
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.scene.Scene;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
 
 public class Main extends Application {
@@ -15,7 +19,15 @@ public class Main extends Application {
 			primaryStage.setScene(scene);
 			primaryStage.setTitle("Nazwa użytkownika");
 			primaryStage.setResizable(false);
-
+			primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+		          public void handle(WindowEvent we) {
+		        	  we.consume(); // dezaktywuje (x) w oknie
+		        	  if (AlertBox.showAndWait(AlertType.CONFIRMATION, "WARCABY", "Czy na pewno chcesz zakończyć grę?")
+		  					.orElse(ButtonType.CANCEL) == ButtonType.OK) {
+		        		  primaryStage.close();
+		  			}
+		          }
+		      });
 			primaryStage.show();
 		} catch (Exception e) {
 			e.printStackTrace();

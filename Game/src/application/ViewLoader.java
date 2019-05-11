@@ -3,7 +3,10 @@ package application;
 import java.io.IOException;
 
 import javafx.fxml.FXMLLoader;
-
+/**
+*
+* @author Krzysztof Jagodziński
+*/
 public class ViewLoader<T, U> {
 	private T fxmlLayout = null;
 	private U fxmlController = null;

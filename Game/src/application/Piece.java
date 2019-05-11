@@ -111,10 +111,8 @@ public class Piece extends StackPane {
 		drawKing(type, tileSize);
 		if (type == PieceType.RED) {
 			type = PieceType.KINGRED;
-
 		} else if (type == PieceType.WHITE) {
 			type = PieceType.KINGWHITE;
-
 		}
 
 	}

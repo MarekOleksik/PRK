@@ -7,8 +7,6 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -19,11 +17,10 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.web.WebView?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.GameController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.GameController">
    <right>
       <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="300.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="testButton" layoutX="5.0" layoutY="98.0" mnemonicParsing="false" onAction="#testButton_Click" text="TEST" AnchorPane.leftAnchor="5.0" />
             <Pane layoutX="210.0" layoutY="14.0" prefHeight="50.0" prefWidth="400.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
                   <Label fx:id="welcomeLabel" layoutY="5.0" text="Hello!">
@@ -35,6 +32,7 @@
                      </font>
                   </Label>
                   <Circle fx:id="circleImage" fill="DODGERBLUE" layoutX="266.0" layoutY="25.0" radius="20.0" stroke="BLACK" strokeType="INSIDE" />
+                  <Button fx:id="testButton" layoutX="192.0" layoutY="13.0" mnemonicParsing="false" onAction="#testButton_Click" text="TEST" />
                </children>
             </Pane>
             <TextField fx:id="messageTextField" maxWidth="0.0" onKeyPressed="#messageTextField_KeyPressed" prefHeight="50.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
@@ -44,7 +42,7 @@
             </TextField>
             <TabPane layoutX="144.0" layoutY="131.0" prefHeight="419.0" prefWidth="300.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="50.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="131.0">
                <tabs>
-                  <Tab text="Chat">
+                  <Tab fx:id="tabChat" text="Chat">
                      <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="202.0" prefWidth="300.0">
                            <children>
@@ -53,7 +51,7 @@
                         </AnchorPane>
                      </content>
                   </Tab>
-                  <Tab text="Obecni">
+                  <Tab fx:id="tabUsers" text="Obecni">
                      <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
@@ -62,28 +60,14 @@
                         </AnchorPane>
                      </content>
                   </Tab>
-                  <Tab text="Przebieg">
-                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                           <children>
-                              <TableView layoutX="86.0" layoutY="51.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                 <columns>
-                                    <TableColumn prefWidth="150.0" text="C1" />
-                                    <TableColumn prefWidth="150.0" text="C2" />
-                                 </columns>
-                              </TableView>
-                           </children>
-                        </AnchorPane>
-                     </content>
-                  </Tab>
                </tabs>
             </TabPane>
-            <CheckBox fx:id="player2CheckBox" layoutX="198.0" layoutY="57.0" mnemonicParsing="false" onAction="#player2CheckBox_OnActrion" prefHeight="19.0" prefWidth="240.0" text="Gracz2" AnchorPane.bottomAnchor="523.0" AnchorPane.leftAnchor="190.0" AnchorPane.rightAnchor="0.0">
+            <CheckBox fx:id="playerRedCheckBox" layoutX="40.0" layoutY="94.0" mnemonicParsing="false" onAction="#playerRedCheckBox_OnActrion" prefHeight="20.0" prefWidth="247.0" text="Gracz czerwony" AnchorPane.bottomAnchor="486.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="10.0">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
             </CheckBox>
-            <CheckBox fx:id="player1CheckBox" layoutX="50.0" layoutY="58.0" mnemonicParsing="false" onAction="#player1CheckBox_OnActrion" prefHeight="19.0" prefWidth="240.0" text="Gracz1" AnchorPane.bottomAnchor="523.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="150.0">
+            <CheckBox fx:id="playerWhiteCheckBox" layoutX="50.0" layoutY="58.0" mnemonicParsing="false" onAction="#playerWhiteCheckBox_OnActrion" prefHeight="19.0" prefWidth="240.0" text="Gracz biały" AnchorPane.bottomAnchor="523.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="10.0">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
@@ -93,10 +77,8 @@
                   <Image url="@../../res/send.png" />
                </image>
             </ImageView>
-            <Circle fx:id="player2Image" fill="DODGERBLUE" layoutX="135.0" layoutY="67.0" radius="15.0" stroke="BLACK" strokeType="INSIDE" AnchorPane.bottomAnchor="518.0" AnchorPane.leftAnchor="155.0" />
-            <Circle fx:id="player1Image" fill="DODGERBLUE" layoutX="29.0" layoutY="67.0" radius="15.0" stroke="BLACK" strokeType="INSIDE" AnchorPane.bottomAnchor="518.0" AnchorPane.leftAnchor="5.0" />
-            <Button fx:id="testButton2" layoutX="53.0" layoutY="98.0" mnemonicParsing="false" onAction="#testButton2_Click" text="TEST2" />
-            <Button fx:id="testButton3" layoutX="108.0" layoutY="98.0" mnemonicParsing="false" onAction="#testButton3_Click" text="TEST3" />
+            <Circle fx:id="playerRedImage" fill="DODGERBLUE" layoutX="20.0" layoutY="104.0" radius="15.0" stroke="BLACK" strokeType="INSIDE" AnchorPane.bottomAnchor="481.0" AnchorPane.leftAnchor="5.0" />
+            <Circle fx:id="playerWhiteImage" fill="DODGERBLUE" layoutX="29.0" layoutY="67.0" radius="15.0" stroke="BLACK" strokeType="INSIDE" AnchorPane.bottomAnchor="518.0" AnchorPane.leftAnchor="5.0" />
          </children>
       </AnchorPane>
    </right>

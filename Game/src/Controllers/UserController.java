@@ -5,13 +5,17 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import application.AlertBox;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 
 import javafx.fxml.Initializable;
 
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -22,7 +26,10 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-
+/**
+*
+* @author Krzysztof Jagodziński
+*/
 public class UserController implements Initializable {
 
 	@FXML
@@ -42,7 +49,8 @@ public class UserController implements Initializable {
 
 	public static UserController fxmlController;
 	public String picID = "";
-
+	public String userName = "";
+	
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		fxmlController = this;
@@ -50,12 +58,16 @@ public class UserController implements Initializable {
 		File file = new File("res/avatars/" + picID);
 		Image image = new Image(file.toURI().toString());
 		picIDImageView.setImage(image);
+		
 	}
 
 	@FXML
 	private void anulujButtonOnActrion() {
 		Stage stage = (Stage) anulujButton.getScene().getWindow();
-		stage.close();
+  	  if (AlertBox.showAndWait(AlertType.CONFIRMATION, "WARCABY", "Czy na pewno chcesz zakończyć grę?")
+				.orElse(ButtonType.CANCEL) == ButtonType.OK) {
+			stage.close();
+  	  }
 	}
 
 	@FXML
@@ -67,11 +79,12 @@ public class UserController implements Initializable {
 		try {
 
 			application.ViewLoader<BorderPane, GameController> viewLoader = new application.ViewLoader<>("/FXML_Files/Game.fxml");
-			if (!userTextField.getText().equals("") && !userTextField.getText().equals("Gracz1") && !userTextField.getText().equals("Gracz2")) {
-				viewLoader.getController().setUserName(userTextField.getText());
+			if (!userTextField.getText().equals("") && !userTextField.getText().equals("Gracz biały") && !userTextField.getText().equals("Gracz czerwony")) {
+				userName = userTextField.getText();
 			} else {
-				viewLoader.getController().setUserName("Gość");
+				userName = "Gość";
 			}
+			viewLoader.getController().setUserName(userName);
 			viewLoader.getController().setPicID(picID);
 			viewLoader.getController().setHost(hostTextField.getText());
 			viewLoader.getController().run();
@@ -80,12 +93,7 @@ public class UserController implements Initializable {
 			BorderPane borderPane = viewLoader.getLayout();
 			Scene scene = new Scene(borderPane);
 
-			
-			//FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML_Files/FXMLCheckersBoard.fxml"));
-			//Parent board = loader.load();
 			GameController controller = viewLoader.getController();
-
-			//borderPane.setCenter(board);
 			
 			// Initialize game board
 			controller.ready(scene);
@@ -94,7 +102,7 @@ public class UserController implements Initializable {
 			Stage stage = new Stage();
 			stage.setResizable(false);
 			stage.setScene(scene);
-			stage.setTitle("WARCABY");
+			stage.setTitle("WARCABY - " + userName);
 			stage.setOnHiding(e -> {
 				try {
 					Stage_Hiding(e, viewLoader.getController());
@@ -103,7 +111,16 @@ public class UserController implements Initializable {
 				}
 			});
 			stage.show();
-
+			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+		          public void handle(WindowEvent we) {
+		        	  we.consume(); // dezaktywuje (x) w oknie
+		        	  if (AlertBox.showAndWait(AlertType.CONFIRMATION, "WARCABY", "Czy na pewno chcesz zakończyć grę?")
+		  					.orElse(ButtonType.CANCEL) == ButtonType.OK) {
+		  				stage.close();
+		  			}
+		          }
+		      });        
+			
 			// ukrycie pierwszego okna
 			primaryStage.hide();
 
@@ -111,6 +128,7 @@ public class UserController implements Initializable {
 			e.printStackTrace();
 		}
 	}
+
 
 	@FXML
 	void picID_MousePressed(MouseEvent event) {

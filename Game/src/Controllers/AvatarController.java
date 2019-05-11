@@ -11,7 +11,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import static Controllers.UserController.fxmlController;
-
+/**
+*
+* @author Krzysztof Jagodziński
+*/
 public class AvatarController {
     @FXML
     private ImageView imageView_1;
