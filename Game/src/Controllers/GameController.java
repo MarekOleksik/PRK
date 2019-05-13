@@ -172,6 +172,8 @@ public class GameController {
 						updateActiveUser();
 					} else if (msg.startsWith("BRD")) {
 						setBoardString(msg);
+					} else if (msg.startsWith("QUIT")) {
+						quitResultMessage(msg);
 					}
 				}
 			}
@@ -212,6 +214,53 @@ public class GameController {
 		});
 	}
 
+	private void quitResultMessage(String msg) {
+		msg = msg.substring(5);
+		String[] param = msg.split("\t");
+		// Aby nie wywoływać Not on FX
+		// application thread;
+		// currentThread=Thread-5
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				if (param[0].equals("WHITE")) {
+					if (param[1].equals(String.valueOf(user.getUID()))) {
+						if (AlertBox.showAndWait(AlertType.INFORMATION, "WARCABY", "Rezygacja - PRZEGRYWASZ!!!")
+								.orElse(ButtonType.CANCEL) == ButtonType.OK) {
+						}
+					} else if (player.getRedPlayer().equals(user.getUserName() + user.getUID())) {
+						if (AlertBox
+								.showAndWait(AlertType.INFORMATION, "WARCABY", "Gracz biały zrezygnował - WYGRYWASZ!!!")
+								.orElse(ButtonType.CANCEL) == ButtonType.OK) {
+						}
+					} else if (AlertBox
+							.showAndWait(AlertType.INFORMATION, "WARCABY", "Gracz biały zrezygnował - WYGRYWA CZERWONY!!!")
+							.orElse(ButtonType.CANCEL) == ButtonType.OK) {
+					}
+
+				}
+				
+				if (param[0].equals("RED")) {
+					if (param[1].equals(String.valueOf(user.getUID()))) {
+						if (AlertBox.showAndWait(AlertType.INFORMATION, "WARCABY", "Rezygacja - PRZEGRYWASZ!!!")
+								.orElse(ButtonType.CANCEL) == ButtonType.OK) {
+						}
+					} else if (player.getWhitePlayer().equals(user.getUserName() + user.getUID())) {
+						if (AlertBox
+								.showAndWait(AlertType.INFORMATION, "WARCABY", "Gracz czerwony zrezygnował - WYGRYWASZ!!!")
+								.orElse(ButtonType.CANCEL) == ButtonType.OK) {
+						}
+					} else if (AlertBox
+							.showAndWait(AlertType.INFORMATION, "WARCABY", "Gracz czerwony zrezygnował - WYGRYWA BIAŁY!!!")
+							.orElse(ButtonType.CANCEL) == ButtonType.OK) {
+					}
+
+				}
+
+			}
+		});
+	}
+
 	private void updateActiveUser() {
 
 		if (player.isRedTurn()) {
@@ -221,7 +270,7 @@ public class GameController {
 		} else {
 			setActiveUser("MOVE_RED");
 			player.setRedTurn(true);
-			System.out.println("MOVE_WHITE");
+			System.out.println("MOVE_RED");
 		}
 
 	}
@@ -311,13 +360,8 @@ public class GameController {
 				@Override
 				public void run() {
 					playerWhiteCheckBox.setText("Gracz biały");
-					if (!playerRedCheckBox.getText().equals(user.getUserName())) { // Czy
-						// gracz
-						// nie
-						// siedzi
-						// na
-						// drugim
-						// miejscu
+					// Czy gracz nie drugim miejscu
+					if (!playerRedCheckBox.getText().equals(user.getUserName())) {
 						playerWhiteCheckBox.setDisable(false);
 					}
 				}
@@ -332,13 +376,8 @@ public class GameController {
 				@Override
 				public void run() {
 					playerRedCheckBox.setText("Gracz czerwony");
+					// Czy gracz nie drugim miejscu
 					if (!playerWhiteCheckBox.getText().equals(user.getUserName())) { // Czy
-						// gracz
-						// nie
-						// siedzi
-						// na
-						// drugim
-						// miejscu
 						playerRedCheckBox.setDisable(false);
 					}
 				}
@@ -423,8 +462,9 @@ public class GameController {
 			image.appendTo(wrapper);
 			Element message_div = new Element("div").attr("class", "message").appendTo(wrapper);
 			new Element("div").attr("class", "content").append(message).appendTo(message_div);
-			
-		} return wrapper;
+
+		}
+		return wrapper;
 	}
 
 	private String decodeUID_PMSG(String msg) {
@@ -450,19 +490,14 @@ public class GameController {
 			Image myImage = new Image(new File("res/avatars/" + user.getPicID()).toURI().toString());
 			ImagePattern pattern = new ImagePattern(myImage);
 			playerWhiteImage.setFill(pattern);
-			if (!playerRedCheckBox.getText().equals("Gracz czerwony")) { // Czy
-																			// drugie
-																			// miejsce
-																			// jest
-																			// zajęte
+			// Czy drugie miejsce jest zajęte
+			if (!playerRedCheckBox.getText().equals("Gracz czerwony")) {
 				newGame();
 			}
 		} else {
 			playerWhiteCheckBox.setText("Gracz biały");
-			if (playerRedCheckBox.getText().equals("Gracz czerwony")) { // Czy
-																		// drugie
-				// miejsce jest
-				// puste
+			// Czy drugie miejsce jest puste
+			if (playerRedCheckBox.getText().equals("Gracz czerwony")) {
 				playerRedCheckBox.setDisable(false);
 			}
 			player.setWhitePlayer("");
@@ -470,6 +505,10 @@ public class GameController {
 			Image myImage = new Image(new File("res/avatars/bot.png").toURI().toString());
 			ImagePattern pattern = new ImagePattern(myImage);
 			playerWhiteImage.setFill(pattern);
+			// Czy drugie miejsce jest zajęte
+			if (!playerRedCheckBox.getText().equals("Gracz czerwony")) {
+				outputPrintWriter.println("QUIT_WHITE");
+			}
 		}
 
 	}
@@ -491,19 +530,14 @@ public class GameController {
 			Image myImage = new Image(new File("res/avatars/" + user.getPicID()).toURI().toString());
 			ImagePattern pattern = new ImagePattern(myImage);
 			playerRedImage.setFill(pattern);
-			if (!playerWhiteCheckBox.getText().equals("Gracz biały")) { // Czy
-																		// drugie
-																		// miejsce
-																		// jest
-																		// zajęte
+			// Czy drugie miejsce jest zajęte
+			if (!playerWhiteCheckBox.getText().equals("Gracz biały")) {
 				newGame();
 			}
 		} else {
 			playerRedCheckBox.setText("Gracz czerwony");
-			if (playerWhiteCheckBox.getText().equals("Gracz biały")) { // Czy
-																		// drugie
-				// miejsce jest
-				// puste
+			// Czy drugie miejsce jest puste
+			if (playerWhiteCheckBox.getText().equals("Gracz biały")) {
 				playerWhiteCheckBox.setDisable(false);
 			}
 			player.setRedPlayer("");
@@ -511,14 +545,18 @@ public class GameController {
 			Image myImage = new Image(new File("res/avatars/bot.png").toURI().toString());
 			ImagePattern pattern = new ImagePattern(myImage);
 			playerRedImage.setFill(pattern);
+			// Czy drugie miejsce jest zajęte
+			if (!playerWhiteCheckBox.getText().equals("Gracz biały")) {
+				outputPrintWriter.println("QUIT_RED");
+			}
 		}
 	}
 
 	@FXML
 	void testButton_Click(ActionEvent event) {
-	  	  if (AlertBox.showAndWait(AlertType.INFORMATION, "WARCABY", "WYGRANA!!!")
-					.orElse(ButtonType.CANCEL) == ButtonType.OK) {
-	  	  }
+		if (AlertBox.showAndWait(AlertType.INFORMATION, "WARCABY", "WYGRANA!!!")
+				.orElse(ButtonType.CANCEL) == ButtonType.OK) {
+		}
 	}
 
 	public static String convertBoardStringToString() {

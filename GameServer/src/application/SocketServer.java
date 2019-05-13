@@ -84,6 +84,10 @@ public class SocketServer {
 						clientMsg = clientMsg.substring(3);
 						// Wysłanie wiadomości (MSG)
 						sendToAll("MSG" + id + "\t" + name + "\t" + picID + "\t" + clientMsg);
+					} else if (clientMsg.startsWith("PMSG")) {
+						clientMsg = clientMsg.substring(4);
+						// Wysłanie wiadomości (PMSG)
+						sendToAll("PMSG" + id + "\t" + name + "\t" + picID + "\t" + clientMsg);
 					} else if (clientMsg.startsWith("SIT_WHITE")) {
 						sendToAll("SIT" + id + "\t" + name + "\t" + picID + "\t" + clientMsg);
 						playerWhite = "SIT" + id + "\t" + name + "\t" + picID + "\t" + clientMsg;
@@ -98,6 +102,8 @@ public class SocketServer {
 						playerRed = "";
 					} else if (clientMsg.startsWith("MOVE")) {
 						sendToAll(clientMsg);
+					} else if (clientMsg.startsWith("QUIT")) {
+						sendToAll(clientMsg+ "\t" + id);
 					} else if (clientMsg.startsWith("NEXT")) {
 						sendToAll(clientMsg);
 					} else if (clientMsg.startsWith("BRD")) {
@@ -134,7 +140,6 @@ public class SocketServer {
 				if (param[0].equals(String.valueOf(id))) {
 					sendToAll("STAND" + id + "\t" + name + "\t" + picID + "\t" + "STAND_WHITE");
 					playerWhite = "";
-					System.out.println("aaa " + playerWhite);
 				}
 
 			}
