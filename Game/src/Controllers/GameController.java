@@ -42,6 +42,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.web.WebView;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 /**
  *
@@ -69,7 +71,7 @@ public class GameController {
 	@FXML
 	private CheckBox playerRedCheckBox;
 	@FXML
-	private Button testButton;
+	private Button aboutButton;
 	@FXML
 	private Tab tabChat;
 	@FXML
@@ -553,9 +555,18 @@ public class GameController {
 	}
 
 	@FXML
-	void testButton_Click(ActionEvent event) {
-		if (AlertBox.showAndWait(AlertType.INFORMATION, "WARCABY", "WYGRANA!!!")
-				.orElse(ButtonType.CANCEL) == ButtonType.OK) {
+	void aboutButton_Click(ActionEvent event) {
+		try {
+			application.ViewLoader<AnchorPane, AboutController> viewLoader = new application.ViewLoader<>("/FXML_Files/About.fxml");
+			AnchorPane anchorPaneAbout = viewLoader.getLayout();
+			Stage stage = new Stage();
+			Scene scene = new Scene(anchorPaneAbout);
+			stage.setScene(scene);
+			stage.initModality(Modality.APPLICATION_MODAL);
+			stage.setTitle("O Programie");
+			stage.showAndWait();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
