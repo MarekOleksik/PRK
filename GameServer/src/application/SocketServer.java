@@ -102,7 +102,7 @@ public class SocketServer {
 						playerRed = "";
 					} else if (clientMsg.startsWith("MOVE")) {
 						sendToAll(clientMsg);
-					} else if (clientMsg.startsWith("QUIT")) {
+					} else if (clientMsg.startsWith("ENDGAME")) {
 						sendToAll(clientMsg+ "\t" + id);
 					} else if (clientMsg.startsWith("NEXT")) {
 						sendToAll(clientMsg);

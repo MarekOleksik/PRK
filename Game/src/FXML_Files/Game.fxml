@@ -32,6 +32,8 @@
                      </font>
                   </Label>
                   <Circle fx:id="circleImage" fill="DODGERBLUE" layoutX="266.0" layoutY="25.0" radius="20.0" stroke="BLACK" strokeType="INSIDE" />
+                  <Button fx:id="tB" layoutX="128.0" layoutY="19.0" mnemonicParsing="false" onAction="#tB_click" text="Start" />
+                  <Button fx:id="tB1" layoutX="178.0" layoutY="19.0" mnemonicParsing="false" onAction="#tB1_click" text="Stop" />
                </children>
             </Pane>
             <TextField fx:id="messageTextField" maxWidth="0.0" onKeyPressed="#messageTextField_KeyPressed" prefHeight="50.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
@@ -78,7 +80,8 @@
             </ImageView>
             <Circle fx:id="playerRedImage" fill="DODGERBLUE" layoutX="20.0" layoutY="104.0" radius="15.0" stroke="BLACK" strokeType="INSIDE" AnchorPane.bottomAnchor="481.0" AnchorPane.leftAnchor="5.0" />
             <Circle fx:id="playerWhiteImage" fill="DODGERBLUE" layoutX="29.0" layoutY="67.0" radius="15.0" stroke="BLACK" strokeType="INSIDE" AnchorPane.bottomAnchor="518.0" AnchorPane.leftAnchor="5.0" />
-            <Button fx:id="aboutButton" layoutX="202.0" layoutY="92.0" mnemonicParsing="false" onAction="#aboutButton_Click" text="O Programie" />
+            <Button fx:id="aboutButton" layoutX="192.0" layoutY="92.0" mnemonicParsing="false" onAction="#aboutButton_Click" text="O Programie" />
+            <Label fx:id="timeMoveLabel" layoutX="192.0" layoutY="59.0" text="Ruch innego gracza" />
          </children>
       </AnchorPane>
    </right>
