@@ -77,10 +77,6 @@ public class GameController {
 	@FXML
 	private Button aboutButton;
 	@FXML
-	private Button tB;
-	@FXML
-	private Button tB1;
-	@FXML
 	private Tab tabChat;
 	@FXML
 	private Tab tabUsers;
@@ -113,7 +109,7 @@ public class GameController {
 	private Boolean timerActive = false;
 	private static int white;
 	private static int red;
-
+	public static String turn;
 	@FXML
 	private void initialize() {
 
@@ -313,6 +309,14 @@ public class GameController {
 		});
 	}
 
+	private void newGame() {
+		setGameBoard(); // nowa gra
+		outputPrintWriter.println("MOVE_WHITE");
+		checkerboard.setBoardServer();
+		outputPrintWriter.println("BRD" + convertBoardStringToString());
+
+	}
+
 	private void endGameResultMessage(String msg) {
 		msg = msg.substring(8);
 		String[] param = msg.split("\t");
@@ -371,17 +375,18 @@ public class GameController {
 	}
 
 	private void updateActiveUser() {
-
 		if (player.isRedTurn()) {
+			//turn = "WHITE";
 			setActiveUser("MOVE_WHITE");
 			System.out.println("MOVE_WHITE");
 			player.setRedTurn(false);
 		} else {
+			//turn = "RED";
 			setActiveUser("MOVE_RED");
 			player.setRedTurn(true);
 			System.out.println("MOVE_RED");
-		}
 
+		}
 	}
 
 	private void setActiveUser(String msg2) {
@@ -391,12 +396,14 @@ public class GameController {
 			public void run() {
 				if ((msg.equals("RED") && player.getRedPlayer().equals(user.getUserName() + user.getUID()))) {
 					player.setRedTurn(true);
+					turn = "RED";
 					anchorPane.setDisable(false);
 					setTimer(60);
 					checkBoardForRedWhite();
 				} else if ((msg.equals("WHITE")
 						&& player.getWhitePlayer().equals(user.getUserName() + user.getUID()))) {
 					player.setRedTurn(false);
+					turn = "WHITE";
 					anchorPane.setDisable(false);
 					setTimer(60);
 					checkBoardForRedWhite();
@@ -633,13 +640,6 @@ public class GameController {
 
 	}
 
-	private void newGame() {
-		setGameBoard(); // nowa gra
-		outputPrintWriter.println("MOVE_WHITE");
-		checkerboard.setBoardServer();
-		outputPrintWriter.println("BRD" + convertBoardStringToString());
-	}
-
 	@FXML
 	void playerRedCheckBox_OnActrion(ActionEvent event) {
 		if (playerRedCheckBox.isSelected()) {
@@ -687,16 +687,6 @@ public class GameController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-
-	@FXML
-	void tB_click(ActionEvent event) {
-		setTimer(5);
-	}
-
-	@FXML
-	void tB1_click(ActionEvent event) {
-		stopTimer();
 	}
 
 	public static String convertBoardStringToString() {

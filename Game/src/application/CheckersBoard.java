@@ -291,9 +291,9 @@ public class CheckersBoard {
 	}
 
 	private void sendBoardToServerAfterMove() {
+		GameController.outputPrintWriter.println("NEXT"); //Wysyła na serwer komendę zmiany gracza
 		setBoardServer(); // Tworzy tablicę z aktualnymi pionkami
 		GameController.outputPrintWriter.println("BRD" + GameController.convertBoardStringToString()); // Konwertuje tablicę na String i wysyła go na serwer
-		GameController.outputPrintWriter.println("NEXT"); //Wysyła na serwer komendę zmiany gracza
 	}
 
 	public void setBoardServer() {

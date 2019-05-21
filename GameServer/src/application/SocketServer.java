@@ -117,6 +117,7 @@ public class SocketServer {
 			} finally {
 				// Czy gracz siedział przy stole? (jak tak to zwalnia miejsce).
 				ifPlayerWasSitting();
+				
 				// Usunięcie z listy obecnych
 				users.remove(id + "\t" + name);
 				// Wysłanie aktualnej listy obecnych
@@ -138,6 +139,9 @@ public class SocketServer {
 				String temp = playerWhite.substring(3);
 				String[] param = temp.split("\t");
 				if (param[0].equals(String.valueOf(id))) {
+					if (!playerRed.equals("")){
+						sendToAll("ENDGAME_WHITE" + "\t" + "odszedł z gry" + "\t" + id);
+					}
 					sendToAll("STAND" + id + "\t" + name + "\t" + picID + "\t" + "STAND_WHITE");
 					playerWhite = "";
 				}
@@ -147,6 +151,9 @@ public class SocketServer {
 				String temp = playerRed.substring(3);
 				String[] param = temp.split("\t");
 				if (param[0].equals(String.valueOf(id))) {
+					if (!playerWhite.equals("")){
+						sendToAll("ENDGAME_RED" + "\t" + "odszedł z gry" + "\t" + id);
+					}
 					sendToAll("STAND" + id + "\t" + name + "\t" + picID + "\t" + "STAND_RED");
 					playerRed = "";
 				}

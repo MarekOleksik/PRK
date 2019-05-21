@@ -1,5 +1,6 @@
 package application;
 
+import Controllers.GameController;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Ellipse;
@@ -38,15 +39,17 @@ public class Piece extends StackPane {
 
 		drawEllipse(type, tileSize);
 
-		setOnMousePressed(e -> {
-			mouseX = e.getSceneX();
-			mouseY = e.getSceneY();
-			System.out.println(mouseX + " + " + mouseY);
-		});
+		if (type.toString().equals(GameController.turn)) {
+			setOnMousePressed(e -> {
+				mouseX = e.getSceneX();
+				mouseY = e.getSceneY();
+				System.out.println(mouseX + " + " + mouseY);
+			});
 
-		setOnMouseDragged(e -> {
-			relocate(e.getSceneX() - mouseX + oldX, e.getSceneY() - mouseY + oldY);
-		});
+			setOnMouseDragged(e -> {
+				relocate(e.getSceneX() - mouseX + oldX, e.getSceneY() - mouseY + oldY);
+			});
+		}
 	}
 
 	public void drawEllipse(PieceType type, double tileSize) {
