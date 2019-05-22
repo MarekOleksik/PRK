@@ -152,7 +152,7 @@ public class CheckersBoard {
 	private MoveResult tryMove(Piece piece, int newX, int newY) {
 
 		try {
-			
+
 			if (board[newX][newY].hasPiece() || (newX + newY) % 2 == 0 || newX > boardWidth || newY > boardHeight) {
 				return new MoveResult(MoveType.NONE);
 			}
@@ -160,7 +160,6 @@ public class CheckersBoard {
 			System.out.println("Wyszedłeś poza pole");
 			return new MoveResult(MoveType.NONE);
 		}
-
 
 		int x0 = toBoard(piece.getOldX());
 		int y0 = toBoard(piece.getOldY());
@@ -243,22 +242,17 @@ public class CheckersBoard {
 			int x0 = toBoard(piece.getOldX());
 			int y0 = toBoard(piece.getOldY());
 
-			MoveResult result = null;		
+			MoveResult result = null;
 			try {
 				if (newX < 0 || newY < 0 || newX >= boardWidth || newY >= boardHeight) {
 					result = new MoveResult(MoveType.NONE);
 				} else {
 					result = tryMove(piece, newX, newY);
 				}
-} 		 catch (ArrayIndexOutOfBoundsException e1) {
-	System.out.println("Wyszedłeś poza pole");
-	result = new MoveResult(MoveType.NONE);
-}
-
-
-
-
-
+			} catch (ArrayIndexOutOfBoundsException e1) {
+				System.out.println("Wyszedłeś poza pole");
+				result = new MoveResult(MoveType.NONE);
+			}
 
 			switch (result.getType()) {
 			case NONE:
@@ -291,9 +285,13 @@ public class CheckersBoard {
 	}
 
 	private void sendBoardToServerAfterMove() {
-		GameController.outputPrintWriter.println("NEXT"); //Wysyła na serwer komendę zmiany gracza
+		GameController.outputPrintWriter.println("NEXT"); // Wysyła na serwer komendę zmiany gracza
 		setBoardServer(); // Tworzy tablicę z aktualnymi pionkami
-		GameController.outputPrintWriter.println("BRD" + GameController.convertBoardStringToString()); // Konwertuje tablicę na String i wysyła go na serwer
+		GameController.outputPrintWriter.println("BRD" + GameController.convertBoardStringToString()); // Konwertuje
+																										// tablicę na
+																										// String i
+																										// wysyła go na
+																										// serwer
 	}
 
 	public void setBoardServer() {

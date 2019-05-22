@@ -11,6 +11,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ *
+ * @author Krzysztof Jagodziński
+ */
+
 public class SocketServer {
 
 	private static final int PORT = 9001;
@@ -68,8 +73,8 @@ public class SocketServer {
 				sendUsers();
 				outputPrintWriter.println(playerWhite);
 				outputPrintWriter.println(playerRed);
-				if (!board.equals("")){
-				outputPrintWriter.println(board);
+				if (!board.equals("")) {
+					outputPrintWriter.println(board);
 				}
 				// Wysłanie kto przyszedł
 				sendToAll("MSG" + 000000000 + "\t" + "System" + "\t" + "bot.png" + "\t" + "Przychodzi: " + name);
@@ -103,12 +108,12 @@ public class SocketServer {
 					} else if (clientMsg.startsWith("MOVE")) {
 						sendToAll(clientMsg);
 					} else if (clientMsg.startsWith("ENDGAME")) {
-						sendToAll(clientMsg+ "\t" + id);
+						sendToAll(clientMsg + "\t" + id);
 					} else if (clientMsg.startsWith("NEXT")) {
 						sendToAll(clientMsg);
 					} else if (clientMsg.startsWith("BRD")) {
 						sendToAll(clientMsg);
-						board=clientMsg;
+						board = clientMsg;
 					}
 
 				}
@@ -117,7 +122,7 @@ public class SocketServer {
 			} finally {
 				// Czy gracz siedział przy stole? (jak tak to zwalnia miejsce).
 				ifPlayerWasSitting();
-				
+
 				// Usunięcie z listy obecnych
 				users.remove(id + "\t" + name);
 				// Wysłanie aktualnej listy obecnych
@@ -139,7 +144,7 @@ public class SocketServer {
 				String temp = playerWhite.substring(3);
 				String[] param = temp.split("\t");
 				if (param[0].equals(String.valueOf(id))) {
-					if (!playerRed.equals("")){
+					if (!playerRed.equals("")) {
 						sendToAll("ENDGAME_WHITE" + "\t" + "odszedł z gry" + "\t" + id);
 					}
 					sendToAll("STAND" + id + "\t" + name + "\t" + picID + "\t" + "STAND_WHITE");
@@ -151,7 +156,7 @@ public class SocketServer {
 				String temp = playerRed.substring(3);
 				String[] param = temp.split("\t");
 				if (param[0].equals(String.valueOf(id))) {
-					if (!playerWhite.equals("")){
+					if (!playerWhite.equals("")) {
 						sendToAll("ENDGAME_RED" + "\t" + "odszedł z gry" + "\t" + id);
 					}
 					sendToAll("STAND" + id + "\t" + name + "\t" + picID + "\t" + "STAND_RED");
