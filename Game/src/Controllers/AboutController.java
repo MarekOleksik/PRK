@@ -11,7 +11,8 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 /**
- *
+ * Kontroler obsługi pliku About.fxml. 
+ * Przedstawia informacje o autorach i zasady gry.
  * @author Krzysztof Jagodziński
  */
 public class AboutController {
@@ -28,6 +29,9 @@ public class AboutController {
 	@FXML
 	private Button closeButton;
 
+	/**
+	 * Metoda inicjalizująca.
+	 */
 	@FXML
 	private void initialize() {
 		File file = new File("res/board.png");
@@ -60,11 +64,17 @@ public class AboutController {
 				+ "Bicie damką jest możliwe zarówno do przodu jak i do tyłu.");
 	}
 
+	/**
+	 * Metoda obsługująca działanie przycisku. 
+	 * @param event - kliknięcie przycisku
+	 */
 	@FXML
 	public void handleCloseButtonAction(ActionEvent event) {
 		stageClose();
 	}
-
+	/**
+	 * Metoda zamykająca okno.
+	 */
 	private void stageClose() {
 		Stage stage = (Stage) closeButton.getScene().getWindow();
 		stage.close();

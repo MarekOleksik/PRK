@@ -8,7 +8,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
-
+/**
+ * Klasa Main - uruchamia program WARCABY.
+ * @author Krzysztof Jagodziński i Marek Oleksik
+ *
+ */
 public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {

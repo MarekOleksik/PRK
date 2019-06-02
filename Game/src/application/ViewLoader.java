@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import javafx.fxml.FXMLLoader;
 /**
-*
+* Klasa służąca do ładowania plików FXML i plików kontrolera.
 * @author Krzysztof Jagodziński
 */
 public class ViewLoader<T, U> {
@@ -19,7 +19,7 @@ public class ViewLoader<T, U> {
 		// }
 		// catch (IOException ex) { ... }
 	}
-
+	
 	public T getLayout() {
 		return fxmlLayout;
 	}

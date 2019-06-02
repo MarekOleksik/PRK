@@ -110,6 +110,7 @@ public class GameController {
 	private static int white;
 	private static int red;
 	public static String turn;
+
 	@FXML
 	private void initialize() {
 
@@ -314,6 +315,7 @@ public class GameController {
 		outputPrintWriter.println("MOVE_WHITE");
 		checkerboard.setBoardServer();
 		outputPrintWriter.println("BRD" + convertBoardStringToString());
+		player.setRedTurn(false);
 
 	}
 
@@ -376,15 +378,15 @@ public class GameController {
 
 	private void updateActiveUser() {
 		if (player.isRedTurn()) {
-			//turn = "WHITE";
+			// turn = "WHITE";
 			setActiveUser("MOVE_WHITE");
 			System.out.println("MOVE_WHITE");
 			player.setRedTurn(false);
 		} else {
-			//turn = "RED";
+			// turn = "RED";
 			setActiveUser("MOVE_RED");
-			player.setRedTurn(true);
 			System.out.println("MOVE_RED");
+			player.setRedTurn(true);
 
 		}
 	}
@@ -397,15 +399,29 @@ public class GameController {
 				if ((msg.equals("RED") && player.getRedPlayer().equals(user.getUserName() + user.getUID()))) {
 					player.setRedTurn(true);
 					turn = "RED";
+
 					anchorPane.setDisable(false);
-					setTimer(60);
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					setTimer(10);
 					checkBoardForRedWhite();
+
 				} else if ((msg.equals("WHITE")
 						&& player.getWhitePlayer().equals(user.getUserName() + user.getUID()))) {
 					player.setRedTurn(false);
 					turn = "WHITE";
 					anchorPane.setDisable(false);
-					setTimer(60);
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					setTimer(10);
 					checkBoardForRedWhite();
 				} else {
 					anchorPane.setDisable(true);
@@ -726,20 +742,20 @@ public class GameController {
 	}
 
 	private void whiteLose() {
-		playerWhiteCheckBox.setText("Gracz biały");
-		playerWhiteCheckBox.setSelected(false);
 		player.setWhitePlayer("");
 		outputPrintWriter.println("STAND_WHITE");
+		playerWhiteCheckBox.setText("Gracz biały");
+		playerWhiteCheckBox.setSelected(false);
 		Image myImage = new Image(new File("res/avatars/bot.png").toURI().toString());
 		ImagePattern pattern = new ImagePattern(myImage);
 		playerWhiteImage.setFill(pattern);
 	}
 
 	private void redLose() {
-		playerRedCheckBox.setText("Gracz czerwony");
-		playerRedCheckBox.setSelected(false);
 		player.setRedPlayer("");
 		outputPrintWriter.println("STAND_RED");
+		playerRedCheckBox.setText("Gracz czerwony");
+		playerRedCheckBox.setSelected(false);
 		Image myImage = new Image(new File("res/avatars/bot.png").toURI().toString());
 		ImagePattern pattern = new ImagePattern(myImage);
 		playerRedImage.setFill(pattern);

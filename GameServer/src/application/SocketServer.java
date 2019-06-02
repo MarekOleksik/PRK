@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /**
- *
+ * Klasa serwera gry WARCABY
  * @author Krzysztof Jagodziński
  */
 
@@ -24,7 +24,8 @@ public class SocketServer {
 	private static String playerRed = "";
 	private static String board = "";
 	private static ConcurrentHashMap<Integer, PrintWriter> clients = new ConcurrentHashMap<Integer, PrintWriter>();
-
+	
+	
 	public static void main(String[] args) throws Exception {
 
 		// adres IP w sieci lokalnej
@@ -40,7 +41,11 @@ public class SocketServer {
 		}
 
 	}
-
+	/**
+	 * Klasa obsługi żądań
+	 * @author Krzysztof Jagodziński
+	 *
+	 */
 	private static class RequestHandler extends Thread {
 		private int id;
 		private String name;
@@ -49,11 +54,17 @@ public class SocketServer {
 		private BufferedReader inputBufferedReader;
 		private PrintWriter outputPrintWriter;
 
+		/**
+		 * Konstruktor klasy obsługi żądań.
+		 * @param socket - gniazdo serwera
+		 */
 		public RequestHandler(Socket socket) {
 			this.socket = socket;
 			id = new Random().nextInt(Integer.MAX_VALUE);
 		}
-
+		/**
+		 * Metoda serwera, która nasłuchuje informacji przychodzących od użytkowników oraz przesyła im informacje zwrotne.
+		 */
 		@Override
 		public void run() {
 			try {
@@ -138,7 +149,10 @@ public class SocketServer {
 				}
 			}
 		}
-
+		/**
+		 * Metoda weryfikująca czy użytkownik, który odszedł siedział przy stole.
+		 * Jeżeli tak to wysyła do innch użytkowników informację,że gracz wstał od stołu.
+		 */
 		private void ifPlayerWasSitting() {
 			if (!playerWhite.equals("")) {
 				String temp = playerWhite.substring(3);
@@ -165,7 +179,9 @@ public class SocketServer {
 
 			}
 		}
-
+		/**
+		 * Metoda wysyła listę aktywnych użytkowników.
+		 */
 		private void sendUsers() {
 			for (ConcurrentHashMap.Entry<Integer, PrintWriter> entry : clients.entrySet()) {
 				PrintWriter printWriter = entry.getValue();
@@ -173,7 +189,10 @@ public class SocketServer {
 				System.out.println(users); // do skasowania
 			}
 		}
-
+		/**
+		 * Metoda wysyła informację do wszystkich aktywnych użytkowników.
+		 * @param serverMsg - informacja wysyłana
+		 */
 		private void sendToAll(String serverMsg) {
 			for (ConcurrentHashMap.Entry<Integer, PrintWriter> entry : clients.entrySet()) {
 				PrintWriter printWriter = entry.getValue();
