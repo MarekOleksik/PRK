@@ -5,8 +5,17 @@ package application;
 * @author Krzysztof Jagodziński
 */
 public class User {
+	/** 
+	 * nazwa obrazka wybrana przez użytkownika
+	 */  
 	String picID;
+	/** 
+	 * nazwa wybrana przez użytkownika
+	 */ 
 	String userName;
+	/** 
+	 * identyfikator użytkownika nadany przez serwer
+	 */ 
 	int UID;
 	
 	/**
@@ -18,7 +27,7 @@ public class User {
 	}
 	/**
 	 * Ustawia nazwę użytkownika.
-	 * @param userName - nazwa wybrana przez użytkownika
+	 * @param userName nazwa wybrana przez użytkownika
 	 */
 	public void setUserName(String userName) {
 		this.userName = userName;
@@ -32,7 +41,7 @@ public class User {
 	}
 	/**
 	 * Ustawia nazwę obrazka użytkownika.
-	 * @param picID - nazwa obrazka wybrana przez użytkownika
+	 * @param picID nazwa obrazka wybrana przez użytkownika
 	 */
 	public void setPicID(String picID) {
 		this.picID = picID;
@@ -46,7 +55,7 @@ public class User {
 	}
 	/**
 	 * Ustawia identyfikator użytkownika.
-	 * @param UID - identyfikator użytkownika nadany przez serwer
+	 * @param UID identyfikator użytkownika nadany przez serwer
 	 */
 	public void setUID(int UID) {
 		this.UID = UID;

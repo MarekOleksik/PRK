@@ -1,4 +1,4 @@
-package Controllers;
+package controllers;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -48,7 +48,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
- *
+ * Kontroler obsługi okna gry - Game. 
+ * Okno, w którym rozgrywa się cała gra.
  * @author Krzysztof Jagodziński
  */
 public class GameController {
@@ -85,21 +86,36 @@ public class GameController {
 
 	private double boardHeight = 600;
 	private double boardWidth = 600;
-
+	/**
+	 * adres serwera
+	 */
 	private String host;
-	// adres serwera
+	/**
+	 * numer portu
+	 */
 	private final int PORT = 9001;
-	// numer portu
+	/**
+	 * obiekt gniazda
+	 */
 	private Socket socket;
-	// obiekt gniazda
+	/**
+	 * bufor wejściowy (dane odebrane z serwera)
+	 */ 
 	private BufferedReader inputBufferedReader;
-	// bufor wejściowy (dane odebrane z serwera)
+	/**
+	 * bufor wyjściowy (dane do wysłania)
+	 */ 
 	public static PrintWriter outputPrintWriter;
-	// bufor wyjściowy (dane do wysłania)
+	/**
+	 * lista aktywnych użytkowników
+	 */ 
 	private ArrayList<String> usersList = new ArrayList<String>();
+	/**
+	 * bufor wyjściowy (dane do wysłania)
+	 */ 
 	Document messagesLayout;
 
-	// Generate new gameboard
+	
 	private CheckersBoard checkerboard = new CheckersBoard(boardWidth, boardHeight);
 	private Player player = new Player();
 	private Sender sender = new Sender();
@@ -109,8 +125,13 @@ public class GameController {
 	private Boolean timerActive = false;
 	private static int white;
 	private static int red;
+	/**
+	 * tura
+	 */ 
 	public static String turn;
-
+	/**
+	 * Metoda inicjalizująca.
+	 */
 	@FXML
 	private void initialize() {
 
@@ -130,7 +151,10 @@ public class GameController {
 		webViewMessages.getEngine()
 				.setUserStyleSheetLocation(getClass().getResource("/application/application.css").toString());
 	}
-
+	/**
+	 * Ustawienie Timera.
+	 * @param time czas w sekundach
+	 */
 	public void setTimer(int time) {
 		Timer timer = new Timer();
 		timerActive = true;
@@ -154,12 +178,16 @@ public class GameController {
 			}
 		}, 0, 1000);
 	}
-
+	/**
+	 * Zatrzymanie Timera.
+	 */
 	public void stopTimer() {
 		timerActive = false;
 		timeMoveLabel.setText("Ruch innego gracza");
 	}
-
+	/**
+	 * Koniec czasu na ruch.
+	 */
 	public void outOfTime() {
 		Platform.runLater(new Runnable() {
 			@Override
@@ -176,7 +204,10 @@ public class GameController {
 		});
 
 	}
-
+	/**
+	 * Koniec gry.
+	 * @param looser przegrany gracz
+	 */
 	public void endGame(String looser) {
 		Platform.runLater(new Runnable() {
 			@Override
@@ -193,7 +224,9 @@ public class GameController {
 		});
 
 	}
-
+	/**
+	 * Sprawdzenie czy są na planszy piony białe i czerwone.
+	 */
 	public void checkBoardForRedWhite() {
 		white = 0;
 		red = 0;
@@ -216,27 +249,43 @@ public class GameController {
 			endGame("WHITE");
 		}
 	}
-
+	/**
+	 * Ustawienie nazwy użytkownika.
+	 * @param userName nazwa użytkownka
+	 */
 	public void setUserName(String userName) {
 		user.setUserName(userName);
 		welcomeLabel.setText("Witaj " + userName + "!");
 	}
-
+	/**
+	 * Ustawienie obrazka użytkownika.
+	 * @param picID - nazwa obrazka użytkowniak
+	 */
 	public void setPicID(String picID) {
 		user.setPicID(picID);
 		Image myImage = new Image(new File("res/avatars/" + picID).toURI().toString());
 		ImagePattern pattern = new ImagePattern(myImage);
 		circleImage.setFill(pattern);
 	}
-
+	/**
+	 * Zwraca adres hosta.
+	 * @return adres hosta
+	 */
 	public String getHost() {
 		return host;
 	}
-
+	/**
+	 * Ustawia adres hosta.
+	 * @param host adres hosta
+	 */
 	public void setHost(String host) {
 		this.host = host;
 	}
-
+	/**
+	 * Metoda klienta, która nasłuchuje informacji przychodzących z serwera.
+	 * @throws UnknownHostException wyjątek/błąd hosta
+	 * @throws IOException wyjątek/bląd I/O
+	 */
 	public void run() throws UnknownHostException, IOException {
 		socket = new Socket(host, PORT);
 		inputBufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -276,12 +325,18 @@ public class GameController {
 		};
 		new Thread(task).start();
 	}
-
+	/**
+	 * Zamknięcie gniazda.
+	 * @throws IOException wyjątek/bląd I/O
+	 */
 	public void closeSocket() throws IOException {
 		this.socket.close();
 
 	}
-
+	/**
+	 * Wypełnienie tabeli pozycjami pionow z informacji otzrymanych z serwera.
+	 * @param msg informacja odebrana z serwera
+	 */
 	private void setBoardString(String msg) {
 		// CheckersBoard.boardString.clear();
 		msg = msg.substring(3);
@@ -309,7 +364,9 @@ public class GameController {
 			}
 		});
 	}
-
+	/**
+	 * Nowa gra.
+	 */
 	private void newGame() {
 		setGameBoard(); // nowa gra
 		outputPrintWriter.println("MOVE_WHITE");
@@ -318,7 +375,10 @@ public class GameController {
 		player.setRedTurn(false);
 
 	}
-
+	/**
+	 * Wynki końca gry.
+	 * @param msg informacja odebrana z serwera
+	 */
 	private void endGameResultMessage(String msg) {
 		msg = msg.substring(8);
 		String[] param = msg.split("\t");
@@ -366,7 +426,7 @@ public class GameController {
 						}
 					} else if (AlertBox
 							.showAndWait(AlertType.INFORMATION, "WARCABY",
-									"Gracz czerwony " + param[1] + " - WYGRYWA BIAŁY!!!")
+									"Gracz czerwony " + param[1] + " - WYGRYWA BIALY!!!")
 							.orElse(ButtonType.CANCEL) == ButtonType.OK) {
 					}
 
@@ -375,7 +435,9 @@ public class GameController {
 			}
 		});
 	}
-
+	/**
+	 * Aktualizacja aktywnego użytkownika.
+	 */
 	private void updateActiveUser() {
 		if (player.isRedTurn()) {
 			// turn = "WHITE";
@@ -391,6 +453,10 @@ public class GameController {
 		}
 	}
 
+	/**
+	 * Ustawienie aktywnego użytkownika.
+	 * @param msg2 informacja odebrana z serwera
+	 */
 	private void setActiveUser(String msg2) {
 		String msg = msg2.substring(5);
 		Platform.runLater(new Runnable() {
@@ -404,7 +470,6 @@ public class GameController {
 					try {
 						Thread.sleep(100);
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					setTimer(10);
@@ -418,7 +483,6 @@ public class GameController {
 					try {
 						Thread.sleep(100);
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					setTimer(10);
@@ -431,7 +495,10 @@ public class GameController {
 		});
 
 	}
-
+	/**
+	 * Aktualizacja listy aktywnych użytkowników.
+	 * @param msg informacja odebrana z serwera
+	 */
 	private void updateUserList(String msg) {
 		usersList.clear();
 		msg = msg.substring(1);
@@ -454,7 +521,10 @@ public class GameController {
 		});
 
 	}
-
+	/**
+	 * Aktualizacja po tym jak użytkownik usiadł.
+	 * @param msg informacja odebrana z serwera
+	 */
 	private void updateUserSit(String msg) {
 		msg = msg.substring(3);
 		String[] param = msg.split("\t");
@@ -490,7 +560,10 @@ public class GameController {
 		}
 
 	}
-
+	/**
+	 * Aktualizacja po tym jak użytkownik wstał.
+	 * @param msg informacja odebrana z serwera
+	 */
 	private void updateUserStand(String msg) {
 		msg = msg.substring(5);
 		String[] param = msg.split("\t");
@@ -548,7 +621,10 @@ public class GameController {
 			messageTextField.clear();
 		}
 	}
-
+	/**
+	 * Metoda obsługi kliknięcia przyciku ENTER w polu tekstowym.
+	 * @param e klikniece przycisku na klawiaturze
+	 */
 	@FXML
 	private void messageTextField_KeyPressed(KeyEvent e) {
 		if (e.getCode() == KeyCode.ENTER) {
@@ -621,7 +697,10 @@ public class GameController {
 		PMSG_Recipient = (param[4]);
 		return "PRIV -> " + PMSG_Recipient + ": " + (param[5]);
 	}
-
+	/**
+	 * Metoda obsługi kliknięcia elementu checkbox.
+	 * @param event kliknięcie elementu checkbox
+	 */
 	@FXML
 	void playerWhiteCheckBox_OnActrion(ActionEvent event) {
 		if (playerWhiteCheckBox.isSelected()) {
@@ -655,7 +734,10 @@ public class GameController {
 		}
 
 	}
-
+	/**
+	 * Metoda obsługi kliknięcia elementu checkbox.
+	 * @param event kliknięcie elementu checkbox
+	 */
 	@FXML
 	void playerRedCheckBox_OnActrion(ActionEvent event) {
 		if (playerRedCheckBox.isSelected()) {
@@ -687,7 +769,10 @@ public class GameController {
 			}
 		}
 	}
-
+	/**
+	 * Metoda obsługi kliknięcia przycisku O Programie.
+	 * @param event kliknięcie przycisku
+	 */
 	@FXML
 	void aboutButton_Click(ActionEvent event) {
 		try {
@@ -704,7 +789,10 @@ public class GameController {
 			e.printStackTrace();
 		}
 	}
-
+	/**
+	 * Generowanie zmiennej string zawierającego listę pionów.
+	 * @return zmienna string z listą pionów na planszy
+	 */
 	public static String convertBoardStringToString() {
 		String temp = "";
 		for (int col = 0; col < 8; col++) {
@@ -728,7 +816,9 @@ public class GameController {
 		scene.heightProperty().addListener(sizeChangeListener);
 
 	}
-
+	/**
+	 * Ustawia planszę gry.
+	 */
 	public void setGameBoard() {
 
 		AnchorPane gameboard = checkerboard.build();
@@ -740,7 +830,9 @@ public class GameController {
 		anchorPane.getChildren().addAll(gameboard);
 
 	}
-
+	/**
+	 * Biały gracz przegrywa.
+	 */
 	private void whiteLose() {
 		player.setWhitePlayer("");
 		outputPrintWriter.println("STAND_WHITE");
@@ -750,7 +842,9 @@ public class GameController {
 		ImagePattern pattern = new ImagePattern(myImage);
 		playerWhiteImage.setFill(pattern);
 	}
-
+	/**
+	 * Czerwony gracz przegrywa.
+	 */
 	private void redLose() {
 		player.setRedPlayer("");
 		outputPrintWriter.println("STAND_RED");

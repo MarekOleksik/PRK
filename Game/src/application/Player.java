@@ -5,8 +5,17 @@ package application;
  * @author Marek Oleksik
  */
 public class Player {
+	/**
+	 * nazwa gracza czerwonego.
+	 */	
 	String redPlayer;
+	/**
+	 * nazwa gracza białego.
+	 */
 	String whitePlayer;
+	/**
+	 * czy trwa ruch czerownego gracza
+	 */
 	boolean isRedTurn = true;
 
 	/**
@@ -18,7 +27,7 @@ public class Player {
 	}
 	/**
 	 * Ustawia nazwę gracza czerwonego.
-	 * @param redPlayer - nazwa gracza czerwonego
+	 * @param redPlayer nazwa gracza czerwonego
 	 */
 	public void setRedPlayer(String redPlayer) {
 		this.redPlayer = redPlayer;
@@ -32,7 +41,7 @@ public class Player {
 	}
 	/**
 	 * Ustawia nazwę gracza białego.
-	 * @param whitePlayer - nazwa gracza białego
+	 * @param whitePlayer nazwa gracza białego
 	 */
 	public void setWhitePlayer(String whitePlayer) {
 		this.whitePlayer = whitePlayer;
@@ -46,7 +55,7 @@ public class Player {
 	}
 	/**
 	 * Ustawia ruch czerownego gracza.
-	 * @param isRedTurn - czy trwa ruch czerownego gracza
+	 * @param isRedTurn czy trwa ruch czerownego gracza
 	 */
 	public void setRedTurn(boolean isRedTurn) {
 		this.isRedTurn = isRedTurn;

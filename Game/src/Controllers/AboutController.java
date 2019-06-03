@@ -1,4 +1,4 @@
-package Controllers;
+package controllers;
 
 import java.io.File;
 
@@ -11,7 +11,7 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 /**
- * Kontroler obsługi pliku About.fxml. 
+ * Kontroler obsługi okna About - O Programie. 
  * Przedstawia informacje o autorach i zasady gry.
  * @author Krzysztof Jagodziński
  */
@@ -66,7 +66,7 @@ public class AboutController {
 
 	/**
 	 * Metoda obsługująca działanie przycisku. 
-	 * @param event - kliknięcie przycisku
+	 * @param event kliknięcie przycisku
 	 */
 	@FXML
 	public void handleCloseButtonAction(ActionEvent event) {

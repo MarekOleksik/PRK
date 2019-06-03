@@ -1,4 +1,6 @@
-package Controllers;
+package controllers;
+
+import static controllers.UserController.fxmlController;
 
 import java.io.File;
 
@@ -9,12 +11,11 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-
-import static Controllers.UserController.fxmlController;
 /**
-*
-* @author Krzysztof Jagodziński
-*/
+ * Kontroler obsługi okna wyboru obrazka użytkownika - Avatar. 
+ * Okno pozwala wybrać obrazek (avatar) z dostępnej bazy obrazków.
+ * @author Krzysztof Jagodziński
+ */
 public class AvatarController {
     @FXML
     private ImageView imageView_1;
@@ -54,7 +55,9 @@ public class AvatarController {
     
     @FXML
     private Button closeButton;
-   
+	/**
+	 * Metoda inicjalizująca.
+	 */
     @FXML
 	private void initialize() {
 
@@ -95,92 +98,135 @@ public class AvatarController {
 		image = new Image(file.toURI().toString());
 		imageView_12.setImage(image);
 	}
-    
+	/**
+	 * Metoda obsługująca działanie przycisku. 
+	 * @param event kliknięcie przycisku
+	 */
     @FXML
     public void handleCloseButtonAction(ActionEvent event) {
         stageClose();
     }
-
+	/**
+	 * Metoda zamykająca okno.
+	 */
 	private void stageClose() {
 		Stage stage = (Stage) closeButton.getScene().getWindow();
         stage.close();
 	}
-    
+	/**
+	 * Metoda obsługi kliknięcia obrazka.
+	 * @param event kliknięcie obrazka
+	 */
     @FXML
     void imageView_1_MousePressed(MouseEvent event) {
     	fxmlController.picIDImageView.setImage(imageView_1.getImage());
     	fxmlController.picID = "1.png";
     	stageClose();    	
     }
-
+	/**
+	 * Metoda obsługi kliknięcia obrazka.
+	 * @param event kliknięcie obrazka
+	 */
     @FXML
     void imageView_2_MousePressed(MouseEvent event) {
     	fxmlController.picIDImageView.setImage(imageView_2.getImage());
     	fxmlController.picID = "2.png";
         stageClose();
     }
+	/**
+	 * Metoda obsługi kliknięcia obrazka.
+	 * @param event kliknięcie obrazka
+	 */
     @FXML
     void imageView_3_MousePressed(MouseEvent event) {
     	fxmlController.picIDImageView.setImage(imageView_3.getImage());
     	fxmlController.picID = "3.png";
         stageClose();
     }
-
+	/**
+	 * Metoda obsługi kliknięcia obrazka.
+	 * @param event kliknięcie obrazka
+	 */
     @FXML
     void imageView_4_MousePressed(MouseEvent event) {
     	fxmlController.picIDImageView.setImage(imageView_4.getImage());
     	fxmlController.picID = "4.png";
         stageClose();
     }
-
+	/**
+	 * Metoda obsługi kliknięcia obrazka.
+	 * @param event kliknięcie obrazka
+	 */
     @FXML
     void imageView_5_MousePressed(MouseEvent event) {
     	fxmlController.picIDImageView.setImage(imageView_5.getImage());
     	fxmlController.picID = "5.png";
         stageClose();
     }
-
+	/**
+	 * Metoda obsługi kliknięcia obrazka.
+	 * @param event kliknięcie obrazka
+	 */
     @FXML
     void imageView_6_MousePressed(MouseEvent event) {
     	fxmlController.picIDImageView.setImage(imageView_6.getImage());
     	fxmlController.picID = "6.png";
         stageClose();
     }
-
+	/**
+	 * Metoda obsługi kliknięcia obrazka.
+	 * @param event kliknięcie obrazka
+	 */
     @FXML
     void imageView_7_MousePressed(MouseEvent event) {
     	fxmlController.picIDImageView.setImage(imageView_7.getImage());
     	fxmlController.picID = "7.png";
         stageClose();
     }
-
+	/**
+	 * Metoda obsługi kliknięcia obrazka.
+	 * @param event kliknięcie obrazka
+	 */
     @FXML
     void imageView_8_MousePressed(MouseEvent event) {
     	fxmlController.picIDImageView.setImage(imageView_8.getImage());
     	fxmlController.picID = "8.png";
         stageClose();
     }
-
+	/**
+	 * Metoda obsługi kliknięcia obrazka.
+	 * @param event kliknięcie obrazka
+	 */
     @FXML
     void imageView_9_MousePressed(MouseEvent event) {
     	fxmlController.picIDImageView.setImage(imageView_9.getImage());
     	fxmlController.picID = "9.png";
         stageClose();
     }
+	/**
+	 * Metoda obsługi kliknięcia obrazka.
+	 * @param event kliknięcie obrazka
+	 */
     @FXML
     void imageView_10_MousePressed(MouseEvent event) {
     	fxmlController.picIDImageView.setImage(imageView_10.getImage());
     	fxmlController.picID = "10.png";
         stageClose();
     }
-
+	/**
+	 * Metoda obsługi kliknięcia obrazka.
+	 * @param event kliknięcie obrazka
+	 */
     @FXML
     void imageView_11_MousePressed(MouseEvent event) {
     	fxmlController.picIDImageView.setImage(imageView_11.getImage());
     	fxmlController.picID = "11.png";
         stageClose();
     }
-
+	/**
+	 * Metoda obsługi kliknięcia obrazka.
+	 * @param event kliknięcie obrazka
+	 */
     @FXML
     void imageView_12_MousePressed(MouseEvent event) {
     	fxmlController.picIDImageView.setImage(imageView_12.getImage());

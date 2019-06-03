@@ -1,12 +1,21 @@
 package application;
 
 /**
- * Klasa nadawcy wiadomości
+ * Klasa nadawcy wiadomości 
  * @author Krzysztof Jagodziński
  */
 public class Sender {
+	/**
+	 * nazwa nadawcy wiadomości
+	 */
 	String senderName;
+	/**
+	 * identyfikator nadawcy
+	 */
 	int senderUID;
+	/**
+	 * nazwa obrazka nadawcy
+	 */
 	String senderPicID;
 
 	/**
@@ -19,7 +28,7 @@ public class Sender {
 
 	/**
 	 * Ustawia nazwę nadawcy wiadomości.
-	 * @param senderName  - nazwa nadawcy wiadomości
+	 * @param senderName nazwa nadawcy wiadomości
 	 */
 	public void setSenderName(String senderName) {
 		this.senderName = senderName;
@@ -33,7 +42,7 @@ public class Sender {
 	}
 	/**
 	 * Ustawia identyfikator nadawcy.
-	 * @param senderUID - identyfikator nadawcy
+	 * @param senderUID identyfikator nadawcy
 	 */
 	public void setSenderUID(int senderUID) {
 		this.senderUID = senderUID;
@@ -47,7 +56,7 @@ public class Sender {
 	}
 	/**
 	 * Ustawia nazwę obrazka nadawcy.
-	 * @param senderPicID - nazwa obrazka nadawcy
+	 * @param senderPicID nazwa obrazka nadawcy
 	 */
 	public void setSenderPicID(String senderPicID) {
 		this.senderPicID = senderPicID;

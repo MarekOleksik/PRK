@@ -1,4 +1,4 @@
-package Controllers;
+package controllers;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,9 +27,10 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 /**
-*
-* @author Krzysztof Jagodziński
-*/
+ * Kontroler obsługi okna logowania użytkownika - User. 
+ * Pozwala wybrać nazwę użytkownika i adres serwera.
+ * @author Krzysztof Jagodziński
+ */
 public class UserController implements Initializable {
 
 	@FXML
@@ -46,11 +47,21 @@ public class UserController implements Initializable {
 
 	@FXML
 	private Button okButton;
-
+	/**
+	 * Kontroler okna logowania użytkownika
+	 */
 	public static UserController fxmlController;
+	/**
+	 * nazwa obrazka wybrana przez użytkownika
+	 */
 	public String picID = "";
+	/**
+	 * nazwa wybrana przez użytkownika
+	 */
 	public String userName = "";
-	
+	/**
+	 * Metoda inicjalizująca.
+	 */
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		fxmlController = this;
@@ -60,7 +71,9 @@ public class UserController implements Initializable {
 		picIDImageView.setImage(image);
 		
 	}
-
+	/**
+	 * Metoda obsługująca działanie przycisku Anuluj. 
+	 */
 	@FXML
 	private void anulujButtonOnActrion() {
 		Stage stage = (Stage) anulujButton.getScene().getWindow();
@@ -69,7 +82,9 @@ public class UserController implements Initializable {
 			stage.close();
   	  }
 	}
-
+	/**
+	 * Metoda obsługująca działanie przycisku OK. 
+	 */
 	@FXML
 	private void okButtonOnActrion() {
 
@@ -129,7 +144,10 @@ public class UserController implements Initializable {
 		}
 	}
 
-
+	/**
+	 * Metoda obsługi kliknięcia obrazka - otwiera okno wybory Avatara.
+	 * @param event kliknięcie obrazka
+	 */
 	@FXML
 	void picID_MousePressed(MouseEvent event) {
 		try {
@@ -145,19 +163,25 @@ public class UserController implements Initializable {
 			e.printStackTrace();
 		}
 	}
-
+	
 	private Object Stage_Hiding(WindowEvent e, GameController controller) throws IOException {
 		controller.closeSocket();
 		return null;
 	}
-
+	/**
+	 * Metoda obsługi kliknięcia przyciku ENTER w polu tekstowym.
+	 * @param e klikniece przycisku na klawiaturze
+	 */
 	@FXML
 	private void userTextField_KeyPressed(KeyEvent e) {
 		if (e.getCode() == KeyCode.ENTER) {
 			okButtonOnActrion();
 		}
 	}
-
+	/**
+	 * Metoda obsługi kliknięcia przyciku ENTER w polu tekstowym.
+	 * @param e klikniece przycisku na klawiaturze
+	 */
 	@FXML
 	private void hostTextField_KeyPressed(KeyEvent e) {
 		if (e.getCode() == KeyCode.ENTER) {

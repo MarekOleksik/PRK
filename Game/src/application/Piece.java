@@ -1,6 +1,6 @@
 package application;
 
-import Controllers.GameController;
+import controllers.GameController;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Ellipse;

@@ -1,6 +1,6 @@
 package application;
 
-import Controllers.GameController;
+import controllers.GameController;
 import javafx.scene.Group;
 import javafx.scene.layout.AnchorPane;
 
