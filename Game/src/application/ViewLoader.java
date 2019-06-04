@@ -19,11 +19,17 @@ public class ViewLoader<T, U> {
 		// }
 		// catch (IOException ex) { ... }
 	}
-	
+	/**
+	 * Zwraca layout.
+	 * @return layout
+	 */
 	public T getLayout() {
 		return fxmlLayout;
 	}
-
+	/**
+	 * Zwraca kontroler.
+	 * @return kontroler
+	 */
 	public U getController() {
 		return fxmlController;
 	}

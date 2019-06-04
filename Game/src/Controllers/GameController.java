@@ -111,17 +111,17 @@ public class GameController {
 	 */ 
 	private ArrayList<String> usersList = new ArrayList<String>();
 	/**
-	 * bufor wyjściowy (dane do wysłania)
+	 * Layout wiadomości
 	 */ 
-	Document messagesLayout;
+	private Document messagesLayout;
 
 	
 	private CheckersBoard checkerboard = new CheckersBoard(boardWidth, boardHeight);
 	private Player player = new Player();
 	private Sender sender = new Sender();
 	private User user = new User();
-	String PMSG_Recipient;
-	int PMSG_RecipientID;
+	private String PMSG_Recipient;
+	private int PMSG_RecipientID;
 	private Boolean timerActive = false;
 	private static int white;
 	private static int red;
@@ -155,7 +155,7 @@ public class GameController {
 	 * Ustawienie Timera.
 	 * @param time czas w sekundach
 	 */
-	public void setTimer(int time) {
+	private void setTimer(int time) {
 		Timer timer = new Timer();
 		timerActive = true;
 		timer.scheduleAtFixedRate(new TimerTask() {
@@ -181,14 +181,14 @@ public class GameController {
 	/**
 	 * Zatrzymanie Timera.
 	 */
-	public void stopTimer() {
+	private void stopTimer() {
 		timerActive = false;
 		timeMoveLabel.setText("Ruch innego gracza");
 	}
 	/**
 	 * Koniec czasu na ruch.
 	 */
-	public void outOfTime() {
+	private void outOfTime() {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
@@ -208,7 +208,7 @@ public class GameController {
 	 * Koniec gry.
 	 * @param looser przegrany gracz
 	 */
-	public void endGame(String looser) {
+	private void endGame(String looser) {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
@@ -227,7 +227,7 @@ public class GameController {
 	/**
 	 * Sprawdzenie czy są na planszy piony białe i czerwone.
 	 */
-	public void checkBoardForRedWhite() {
+	private void checkBoardForRedWhite() {
 		white = 0;
 		red = 0;
 		for (int col = 0; col < 8; col++) {
@@ -605,7 +605,9 @@ public class GameController {
 		}
 
 	}
-
+	/**
+	 * Metoda obsługi kliknięcia przyciku myszy na polu obrazka.
+	 */
 	@FXML
 	private void sendImageView_MouseReleased() {
 		if (messageTextField.getLength() == 0)
@@ -641,7 +643,11 @@ public class GameController {
 			}
 		});
 	}
-
+	/**
+	 * Konwersja wiadomości na HTML.
+	 * @param message wiadomość
+	 * @return wiadomość formatowaną jak HTML
+	 */
 	private Element toHTML(String message) {
 		System.out.println("toHTML:" + message);
 		String msgClass = (user.getUID() == sender.getSenderUID()) ? "request" : "response";
@@ -657,7 +663,11 @@ public class GameController {
 		new Element("div").attr("class", "content").append(message).appendTo(message_div);
 		return wrapper;
 	}
-
+	/**
+	 * Dekoduje ID użytkownika, który wysłał wiadomość.
+	 * @param msg informacja odebrana z serwera
+	 * @return wiadomość do wyświetlenia
+	 */
 	private String decodeUID(String msg) {
 		msg = msg.substring(3);
 		String[] param = msg.split("\t");
@@ -666,7 +676,11 @@ public class GameController {
 		sender.setSenderPicID(param[2]);
 		return msg.substring(param[0].length() + param[1].length() + param[2].length() + 3);
 	}
-
+	/**
+	 * Konwersja wiadomości prywatnej na HTML.
+	 * @param message wiadomość
+	 * @return wiadomość formatowaną jak HTML
+	 */
 	private Element toHTML_PMSG(String message) {
 		System.out.println("toHTML_PMSG:" + message);
 		String msgClass = (user.getUID() == sender.getSenderUID()) ? "request" : "response";
@@ -685,7 +699,11 @@ public class GameController {
 		}
 		return wrapper;
 	}
-
+	/**
+	 * Dekoduje ID użytkownika, który wysłał wiadomość prywatną.
+	 * @param msg informacja odebrana z serwera
+	 * @return wiadomość do wyświetlenia
+	 */
 	private String decodeUID_PMSG(String msg) {
 		msg = msg.substring(4);
 		String[] param = msg.split("\t");
@@ -702,7 +720,7 @@ public class GameController {
 	 * @param event kliknięcie elementu checkbox
 	 */
 	@FXML
-	void playerWhiteCheckBox_OnActrion(ActionEvent event) {
+	private void playerWhiteCheckBox_OnActrion(ActionEvent event) {
 		if (playerWhiteCheckBox.isSelected()) {
 			playerWhiteCheckBox.setText(user.getUserName());
 			playerRedCheckBox.setDisable(true);
@@ -739,7 +757,7 @@ public class GameController {
 	 * @param event kliknięcie elementu checkbox
 	 */
 	@FXML
-	void playerRedCheckBox_OnActrion(ActionEvent event) {
+	private void playerRedCheckBox_OnActrion(ActionEvent event) {
 		if (playerRedCheckBox.isSelected()) {
 			playerRedCheckBox.setText(user.getUserName());
 			playerWhiteCheckBox.setDisable(true);
@@ -774,7 +792,7 @@ public class GameController {
 	 * @param event kliknięcie przycisku
 	 */
 	@FXML
-	void aboutButton_Click(ActionEvent event) {
+	private void aboutButton_Click(ActionEvent event) {
 		try {
 			application.ViewLoader<AnchorPane, AboutController> viewLoader = new application.ViewLoader<>(
 					"/FXML_Files/About.fxml");
@@ -803,7 +821,7 @@ public class GameController {
 		temp = temp + "END";
 		return temp;
 	}
-
+	
 	public void ready(Scene scene) {
 		// Create change listener for width/height
 		ChangeListener<Number> sizeChangeListener = (ObservableValue<? extends Number> observable, Number oldValue,

@@ -283,7 +283,9 @@ public class CheckersBoard {
 
 		return piece;
 	}
-
+	/**
+	 * Wysyła tablice z pozycjami pionow na serwer.
+	 */
 	private void sendBoardToServerAfterMove() {
 		GameController.outputPrintWriter.println("NEXT"); // Wysyła na serwer komendę zmiany gracza
 		setBoardServer(); // Tworzy tablicę z aktualnymi pionkami
@@ -293,7 +295,9 @@ public class CheckersBoard {
 																										// wysyła go na
 																										// serwer
 	}
-
+	/**
+	 * Tworzy tablice z pozycjami pionow.
+	 */
 	public void setBoardServer() {
 		for (int col = 0; col < 8; col++) {
 			for (int row = 0; row < 8; row++) {

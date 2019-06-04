@@ -101,7 +101,6 @@ public class Piece extends StackPane {
 	}
 
 	public boolean isKing() {
-		// TODO Auto-generated method stub
 		return isKing;
 	}
 
