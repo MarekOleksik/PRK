@@ -5,7 +5,8 @@ import javafx.scene.Group;
 import javafx.scene.layout.AnchorPane;
 
 /**
- *
+ * Klasa CheckersBoard służy do rysowania i obsługi planszy do gry w Warcaby.
+ *  
  * @author Marek Oleksik
  */
 public class CheckersBoard {

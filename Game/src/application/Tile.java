@@ -4,7 +4,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 /**
- *
+ * Klasa Tile jest odpowiedzialna za pojedynczy kwadrat na planszy do gry Warcaby.
+ * Klasa dziedziczy po klasie {@link javafx.scene.shape.Rectangle}.
  * @author Marek Oleksik
  */
 public class Tile extends Rectangle {

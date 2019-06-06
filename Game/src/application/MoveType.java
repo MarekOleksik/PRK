@@ -1,7 +1,7 @@
 package application;
 
 /**
- *
+ * Klasa enum zawierająca dozwolone możliwości ruchu pionkiem
  * @author Marek Oleksik
  */
 

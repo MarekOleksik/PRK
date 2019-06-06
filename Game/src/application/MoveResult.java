@@ -1,7 +1,7 @@
 package application;
 
 /**
- *
+ * Klasa zawiera zmienne oraz metody odpowiedzialne za obsługę rezultatu wykonanego ruchu pionkiem
  * @author Marek Oleksik
  */
 
