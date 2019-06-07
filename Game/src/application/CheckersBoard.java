@@ -6,60 +6,147 @@ import javafx.scene.layout.AnchorPane;
 
 /**
  * Klasa CheckersBoard służy do rysowania i obsługi planszy do gry w Warcaby.
- *  
+ * 
  * @author Marek Oleksik
  */
 public class CheckersBoard {
-	private double boardHeight;
-	private double boardWidth;
-	private double rectangleHeight;
-	private double rectangleWidth;
-	private final int NUMCOLS = 8;
-	private final int NUMROWS = 8;
-	private double rectangleSize;
 
+	/**
+	 * Zmienna określająca wysokość planszy do gry
+	 */
+	private double boardHeight;
+	/**
+	 * Zmienna określająca szerokość planszy do gry
+	 */
+	private double boardWidth;
+	/**
+	 * Zmienna określająca wysokość pojedynczego pola planszy do gry
+	 */
+	private double rectangleHeight;
+	/**
+	 * Zmienna określająca szerokość pojedynczego pola planszy do gry
+	 */
+	private double rectangleWidth;
+	/**
+	 * Zmienna typu final określająca ilość kolumn planszy do gry
+	 */
+	private final int NUMCOLS = 8;
+	/**
+	 * Zmienna typu final określająca ilość wierszy planszy do gry
+	 */
+	private final int NUMROWS = 8;
+	/**
+	 * Zmienna określająca rozmiar pojedynczego pola planszy do gry
+	 */
+	private double rectangleSize;
+	/**
+	 * Zmienna typu AnchorPane określająca planszę do gry
+	 * 
+	 * @see AnchorPane
+	 */
 	private AnchorPane gameboard = null;
+	/**
+	 * Tablica typu String określająca aktualny stan pionków na planszy
+	 */
 	public static String[][] boardString = new String[8][8];
+	/**
+	 * Tablica typu Tile określająca widok planszy do gry
+	 */
 	private Tile[][] board = new Tile[NUMCOLS][NUMROWS];
+	/**
+	 * Obiekt typu Group grupujący poszczególne pola planszy do gry
+	 */
 	private Group tileGroup = new Group();
+	/**
+	 * Obiekt typu Group grupujący poszczególne pionki
+	 */
 	private Group pieceGroup = new Group();
 
+	/**
+	 * Domyślny konstruktor klasy CheckersBoard
+	 */
 	public CheckersBoard() {
 
 	}
 
+	/**
+	 * Konstruktor klasy ChceckersBoard przyjmujący dwa parametry:
+	 * 
+	 * @param boardWidth  - szerokość planszy do gry
+	 * @param boardHeight - wysokość planszy do gry
+	 */
 	public CheckersBoard(double boardWidth, double boardHeight) {
 		this.boardWidth = boardWidth;
 		this.boardHeight = boardHeight;
 	}
 
+	/**
+	 * Metoda zwracająca planszę do gry
+	 * 
+	 * @return gameboard
+	 */
 	public AnchorPane getBoard() {
 		return gameboard;
 	}
+
+	/**
+	 * Metoda zwracająca szerokość planszy do gry
+	 * 
+	 * @return boardWidth
+	 */
 
 	public double getWidth() {
 		return boardWidth;
 	}
 
+	/**
+	 * Metoda zwracająca wysokość planszy do gry
+	 * 
+	 * @return boardHeight
+	 */
 	public double getHeight() {
 		return boardHeight;
 	}
 
+	/**
+	 * Metoda zwracająca szerokość pojedynczego pola planszy do gry
+	 * 
+	 * @return rectangleWidth
+	 */
 	public double getRectangleWidth() {
 		return rectangleWidth;
 	}
 
+	/**
+	 * Metoda zwracająca wysokość pojedynczego pola planszy do gry
+	 * 
+	 * @return
+	 */
 	public double getRectangleHeight() {
 		return rectangleHeight;
 	}
+
+	/**
+	 * Metoda zwracająca rozmiar pojedynczego pola planszy do gry
+	 * 
+	 * @return
+	 */
 
 	public double getRectangleSize() {
 		return rectangleSize;
 	}
 
+	/**
+	 * Metoda typu AnchorPane odpowiedzialna za narysowanie pojedynczych pól i
+	 * ustawienie pionków na planszy do gry. Wylicza maksymalną szerokość i wysokość
+	 * pojedynczego pola wykorzystując najmniejszy wymiar planszy. Zastosowanie ma
+	 * to w przypadku skalowania okna.
+	 * 
+	 * @see AnchorPane
+	 * @return gameboard
+	 */
 	public AnchorPane build() {
-		// Calculate the max width and height of the board squares using the
-		// smallest board dimension
+
 		if (boardWidth < boardHeight) {
 			rectangleWidth = boardWidth / NUMCOLS;
 			rectangleHeight = boardWidth / NUMROWS;
@@ -70,7 +157,7 @@ public class CheckersBoard {
 		rectangleSize = rectangleWidth;
 		gameboard = new AnchorPane();
 		gameboard.getChildren().addAll(tileGroup, pieceGroup);
-		// Create board squares
+		// Tworzy pojedyncze pola planszy
 		for (int x = 0; x < NUMROWS; x++) {
 			for (int y = 0; y < NUMCOLS; y++) {
 
@@ -98,9 +185,15 @@ public class CheckersBoard {
 		return gameboard;
 	}
 
+	/**
+	 * Metoda typu AnchorPane odpowiedzialna za przerysowanie planszy do gry po
+	 * wykonanym ruchu.
+	 * 
+	 * @see AnchorPane
+	 * @return
+	 */
 	public AnchorPane fill() {
-		// Calculate the max width and height of the board squares using the
-		// smallest board dimension
+
 		if (boardWidth < boardHeight) {
 			rectangleWidth = boardWidth / NUMCOLS;
 			rectangleHeight = boardWidth / NUMROWS;
@@ -111,7 +204,7 @@ public class CheckersBoard {
 		rectangleSize = rectangleWidth;
 		gameboard = new AnchorPane();
 		gameboard.getChildren().addAll(tileGroup, pieceGroup);
-		// Create board squares
+		// Tworzy pojedyncze pola planszy
 		for (int x = 0; x < NUMROWS; x++) {
 			for (int y = 0; y < NUMCOLS; y++) {
 
@@ -150,6 +243,16 @@ public class CheckersBoard {
 		return gameboard;
 	}
 
+	/**
+	 * Metoda typu MoveResult zwracająca rodzaj ruchu wykonanego przez zawodnika.
+	 * Metoda zawiera logikę gry, czyli sposób w jaki zawodnik porusza się pionakmi
+	 * po planszy, w jaki sposób następuje bicie oraz kiedy pionek staje się damką.
+	 * 
+	 * @param piece
+	 * @param newX
+	 * @param newY
+	 * @return
+	 */
 	private MoveResult tryMove(Piece piece, int newX, int newY) {
 
 		try {
@@ -168,7 +271,7 @@ public class CheckersBoard {
 		System.out.println("x0= " + x0 + " y0= " + y0);
 		System.out.println("newx = " + newX + " newy = " + newY);
 
-		// piece is not King
+		// pionek nie jest damką
 
 		if (!piece.isKing()) {
 			if (piece.getType().equals(PieceType.RED) && Math.abs(newX - x0) == 1
@@ -204,7 +307,7 @@ public class CheckersBoard {
 
 		}
 
-		// piece is King
+		// pionek jest damką
 
 		else if (piece.isKing()) {
 			if ((piece.getType().equals(PieceType.KINGRED) && Math.abs(newX - x0) == 1)
@@ -234,6 +337,15 @@ public class CheckersBoard {
 		return (int) ((pixel + rectangleSize / 2) / rectangleSize);
 	}
 
+	/**
+	 * Metoda makePiece jest odpowiedzialna za przerysowanie pionka na planszy po
+	 * wykonanym ruchu przez zawodnika.
+	 * 
+	 * @param type
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	private Piece makePiece(PieceType type, int x, int y) {
 		Piece piece = new Piece(type, x, y, rectangleSize);
 
@@ -284,6 +396,7 @@ public class CheckersBoard {
 
 		return piece;
 	}
+
 	/**
 	 * Wysyła tablice z pozycjami pionow na serwer.
 	 */
@@ -296,6 +409,7 @@ public class CheckersBoard {
 																										// wysyła go na
 																										// serwer
 	}
+
 	/**
 	 * Tworzy tablice z pozycjami pionow.
 	 */

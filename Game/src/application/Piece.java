@@ -13,23 +13,52 @@ import javafx.scene.shape.Ellipse;
  * @author Marek Oleksik
  */
 public class Piece extends StackPane {
+	/**
+	 * Obiekt typu PieceType odpowiedzialny za kolor pionka
+	 */
 	private PieceType type;
+	/**
+	 * Zmienna wyrażająca rozmiar pojedynczego pola planszy do gry
+	 */
 	private double tileSize;
-
+	/**
+	 * Zmienne określające współrzędne punktu, w który nastąpiło kliknięcie myszą
+	 */
 	private double mouseX, mouseY;
+	/**
+	 * Zmienne określające poprzednie położenie pionka
+	 */
 	private double oldX, oldY;
+	/**
+	 * Zmienna określająca czy dany pionek jest damką
+	 */
 	private boolean isKing;
+	/**
+	 * Zmienna finalna odpowiedzialna za kolor jasnego pionka
+	 */
 	private final Color LIGHTPIECE = Color.valueOf("white");
+	/**
+	 * Zmienna finalna odpowiedzialna za kolor ciemnego pionka
+	 */
 	private final Color DARKPIECE = Color.valueOf("red");
-
+	/**
+	 * Zwraca kolor pionka
+	 * @return type
+	 */
 	public PieceType getType() {
 		return type;
 	}
-
+	/**
+	 * Zwraca współrzędna X poprzedniego położenia pionka
+	 * @return oldX
+	 */
 	public double getOldX() {
 		return oldX;
 	}
-
+	/**
+	 * Zwraca współrzędna Y poprzedniego położenia pionka
+	 * @return oldY
+	 */
 	public double getOldY() {
 		return oldY;
 	}
