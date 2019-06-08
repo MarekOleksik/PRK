@@ -1,7 +1,7 @@
 package application;
 
 /**
- * Klasa nadawcy wiadomości 
+ * Klasa nadawcy wiadomości zawiera nazwę nadawcy, identyfikator i nazwę obrazka.
  * @author Krzysztof Jagodziński
  */
 public class Sender {

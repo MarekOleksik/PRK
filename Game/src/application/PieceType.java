@@ -1,7 +1,7 @@
 package application;
 
 /**
- * Klasa enum zawierająca kolor i typ pionka
+ * Klasa enum zawierająca kolor i typ pionka.
  * 
  * @author Marek Oleksik
  */

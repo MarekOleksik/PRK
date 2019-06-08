@@ -1,7 +1,7 @@
 package application;
 
 /**
-* Klasa użytkownika
+* Klasa użytkownika zawiera nazwę użytkownika, identyfikator i nazwę obrazka.
 * @author Krzysztof Jagodziński
 */
 public class User {

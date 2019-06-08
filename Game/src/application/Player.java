@@ -1,7 +1,7 @@
 package application;
 
 /**
- * Klasa gracza
+ * Klasa gracza zawiera nazwę gracza czerwonego i białego oraz informacje dotyczące aktualnego ruchu. 
  * @author Marek Oleksik
  */
 public class Player {
