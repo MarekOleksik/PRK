@@ -1,7 +1,5 @@
 package controllers;
 
-import java.io.File;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -34,8 +32,7 @@ public class AboutController {
 	 */
 	@FXML
 	private void initialize() {
-		File file = new File("res/board.png");
-		Image image = new Image(file.toURI().toString());
+		Image image = new Image(getClass().getClassLoader().getResourceAsStream("board.png"));
 		boardImageView.setImage(image);
 		topTextArea.setText("WARCABY" + "\n" + "\n" + "Autorzy:" + "\n" + "Krzysztof Jagodziński" + "\n" + "Marek Oleksik"
 				+ "\n" + "\n" + "Program przygotowany na zaliczenie przedmiotu - Pojekt Końcowy."

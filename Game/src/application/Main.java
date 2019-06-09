@@ -18,7 +18,7 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 		try {
 
-			ViewLoader<AnchorPane, controllers.UserController> viewLoader = new ViewLoader<>("/FXML_Files/User.fxml");
+			ViewLoader<AnchorPane, controllers.UserController> viewLoader = new ViewLoader<>("/fxml_files/User.fxml");
 			Scene scene = new Scene(viewLoader.getLayout());
 			primaryStage.setScene(scene);
 			primaryStage.setTitle("Nazwa użytkownika");
@@ -34,7 +34,9 @@ public class Main extends Application {
 		      });
 			primaryStage.show();
 		} catch (Exception e) {
+
 			e.printStackTrace();
+			
 		}
 
 	}

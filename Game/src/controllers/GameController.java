@@ -135,8 +135,10 @@ public class GameController {
 	@FXML
 	private void initialize() {
 
-		Image myImage = new Image(new File("res/avatars/bot.png").toURI().toString());
+		Image myImage = new Image(getClass().getClassLoader().getResourceAsStream("bot.png"));
 		ImagePattern pattern = new ImagePattern(myImage);
+		myImage = new Image(getClass().getClassLoader().getResourceAsStream("send.png"));
+		sendImageView.setImage(myImage);
 		playerWhiteImage.setFill(pattern);
 		playerRedImage.setFill(pattern);
 		player.setWhitePlayer(""); // Aby nie buło
@@ -263,7 +265,7 @@ public class GameController {
 	 */
 	public void setPicID(String picID) {
 		user.setPicID(picID);
-		Image myImage = new Image(new File("res/avatars/" + picID).toURI().toString());
+		Image myImage = new Image(getClass().getClassLoader().getResourceAsStream(picID));
 		ImagePattern pattern = new ImagePattern(myImage);
 		circleImage.setFill(pattern);
 	}
@@ -472,7 +474,7 @@ public class GameController {
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
-					setTimer(10);
+					setTimer(60);
 					checkBoardForRedWhite();
 
 				} else if ((msg.equals("WHITE")
@@ -485,7 +487,7 @@ public class GameController {
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
-					setTimer(10);
+					setTimer(60);
 					checkBoardForRedWhite();
 				} else {
 					anchorPane.setDisable(true);
@@ -540,7 +542,7 @@ public class GameController {
 					playerWhiteCheckBox.setDisable(true);
 				}
 			});
-			Image myImage = new Image(new File("res/avatars/" + param[2]).toURI().toString());
+			Image myImage = new Image(getClass().getClassLoader().getResourceAsStream(param[2]));
 			ImagePattern pattern = new ImagePattern(myImage);
 			playerWhiteImage.setFill(pattern);
 		}
@@ -553,8 +555,7 @@ public class GameController {
 					playerRedCheckBox.setDisable(true);
 				}
 			});
-
-			Image myImage = new Image(new File("res/avatars/" + param[2]).toURI().toString());
+			Image myImage = new Image(getClass().getClassLoader().getResourceAsStream(param[2]));
 			ImagePattern pattern = new ImagePattern(myImage);
 			playerRedImage.setFill(pattern);
 		}
@@ -582,7 +583,7 @@ public class GameController {
 					}
 				}
 			});
-			Image myImage = new Image(new File("res/avatars/bot.png").toURI().toString());
+			Image myImage = new Image(getClass().getClassLoader().getResourceAsStream("bot.png"));
 			ImagePattern pattern = new ImagePattern(myImage);
 			playerWhiteImage.setFill(pattern);
 		}
@@ -598,8 +599,7 @@ public class GameController {
 					}
 				}
 			});
-
-			Image myImage = new Image(new File("res/avatars/bot.png").toURI().toString());
+			Image myImage = new Image(getClass().getClassLoader().getResourceAsStream("bot.png"));
 			ImagePattern pattern = new ImagePattern(myImage);
 			playerRedImage.setFill(pattern);
 		}
@@ -652,8 +652,7 @@ public class GameController {
 		System.out.println("toHTML:" + message);
 		String msgClass = (user.getUID() == sender.getSenderUID()) ? "request" : "response";
 		Element wrapper = new Element("li").attr("class", msgClass);
-		Element image = new Element("img").attr("class", "avatar").attr("src",
-				new File("res/avatars/" + user.getPicID()).toURI().toString());
+		Element image = new Element("img").attr("class", "avatar").attr("src",new File("res/avatars/" + user.getPicID()).toURI().toString());
 		if (user.getUID() != sender.getSenderUID()) {
 			image.attr("src", new File("res/avatars/" + sender.getSenderPicID()).toURI().toString());
 			new Element("span").attr("class", "author").append(sender.getSenderName()).appendTo(wrapper);
@@ -726,8 +725,7 @@ public class GameController {
 			playerRedCheckBox.setDisable(true);
 			outputPrintWriter.println("SIT_WHITE");
 			player.setWhitePlayer(user.getUserName() + user.getUID());
-
-			Image myImage = new Image(new File("res/avatars/" + user.getPicID()).toURI().toString());
+			Image myImage = new Image(getClass().getClassLoader().getResourceAsStream(user.getPicID()));
 			ImagePattern pattern = new ImagePattern(myImage);
 			playerWhiteImage.setFill(pattern);
 			// Czy drugie miejsce jest zajęte
@@ -742,7 +740,7 @@ public class GameController {
 			}
 			player.setWhitePlayer("");
 			outputPrintWriter.println("STAND_WHITE");
-			Image myImage = new Image(new File("res/avatars/bot.png").toURI().toString());
+			Image myImage = new Image(getClass().getClassLoader().getResourceAsStream("bot.png"));
 			ImagePattern pattern = new ImagePattern(myImage);
 			playerWhiteImage.setFill(pattern);
 			// Czy drugie miejsce jest zajęte
@@ -763,7 +761,7 @@ public class GameController {
 			playerWhiteCheckBox.setDisable(true);
 			player.setRedPlayer(user.getUserName() + user.getUID());
 			outputPrintWriter.println("SIT_RED");
-			Image myImage = new Image(new File("res/avatars/" + user.getPicID()).toURI().toString());
+			Image myImage = new Image(getClass().getClassLoader().getResourceAsStream(user.getPicID()));
 			ImagePattern pattern = new ImagePattern(myImage);
 			playerRedImage.setFill(pattern);
 			// Czy drugie miejsce jest zajęte
@@ -778,7 +776,7 @@ public class GameController {
 			}
 			player.setRedPlayer("");
 			outputPrintWriter.println("STAND_RED");
-			Image myImage = new Image(new File("res/avatars/bot.png").toURI().toString());
+			Image myImage = new Image(getClass().getClassLoader().getResourceAsStream("bot.png"));
 			ImagePattern pattern = new ImagePattern(myImage);
 			playerRedImage.setFill(pattern);
 			// Czy drugie miejsce jest zajęte
@@ -795,7 +793,7 @@ public class GameController {
 	private void aboutButton_Click(ActionEvent event) {
 		try {
 			application.ViewLoader<AnchorPane, AboutController> viewLoader = new application.ViewLoader<>(
-					"/FXML_Files/About.fxml");
+					"/fxml_files/About.fxml");
 			AnchorPane anchorPaneAbout = viewLoader.getLayout();
 			Stage stage = new Stage();
 			Scene scene = new Scene(anchorPaneAbout);
@@ -856,7 +854,7 @@ public class GameController {
 		outputPrintWriter.println("STAND_WHITE");
 		playerWhiteCheckBox.setText("Gracz biały");
 		playerWhiteCheckBox.setSelected(false);
-		Image myImage = new Image(new File("res/avatars/bot.png").toURI().toString());
+		Image myImage = new Image(getClass().getClassLoader().getResourceAsStream("bot.png"));
 		ImagePattern pattern = new ImagePattern(myImage);
 		playerWhiteImage.setFill(pattern);
 	}
@@ -868,7 +866,7 @@ public class GameController {
 		outputPrintWriter.println("STAND_RED");
 		playerRedCheckBox.setText("Gracz czerwony");
 		playerRedCheckBox.setSelected(false);
-		Image myImage = new Image(new File("res/avatars/bot.png").toURI().toString());
+		Image myImage = new Image(getClass().getClassLoader().getResourceAsStream("bot.png"));
 		ImagePattern pattern = new ImagePattern(myImage);
 		playerRedImage.setFill(pattern);
 	}

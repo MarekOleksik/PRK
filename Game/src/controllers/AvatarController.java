@@ -2,8 +2,6 @@ package controllers;
 
 import static controllers.UserController.fxmlController;
 
-import java.io.File;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -61,41 +59,29 @@ public class AvatarController {
     @FXML
 	private void initialize() {
 
-		File file = new File("res/avatars/1.png");
-		Image image = new Image(file.toURI().toString());
+    	Image image = new Image(getClass().getClassLoader().getResourceAsStream("1.png"));
 		imageView_1.setImage(image);
-		file = new File("res/avatars/2.png");
-		image = new Image(file.toURI().toString());
+		image = new Image(getClass().getClassLoader().getResourceAsStream("2.png"));
 		imageView_2.setImage(image);
-		file = new File("res/avatars/3.png");
-		image = new Image(file.toURI().toString());
+		image = new Image(getClass().getClassLoader().getResourceAsStream("3.png"));
 		imageView_3.setImage(image);
-		file = new File("res/avatars/4.png");
-		image = new Image(file.toURI().toString());
+		image = new Image(getClass().getClassLoader().getResourceAsStream("4.png"));
 		imageView_4.setImage(image);
-		file = new File("res/avatars/5.png");
-		image = new Image(file.toURI().toString());
+		image = new Image(getClass().getClassLoader().getResourceAsStream("5.png"));
 		imageView_5.setImage(image);
-		file = new File("res/avatars/6.png");
-		image = new Image(file.toURI().toString());
+		image = new Image(getClass().getClassLoader().getResourceAsStream("6.png"));
 		imageView_6.setImage(image);
-		file = new File("res/avatars/7.png");
-		image = new Image(file.toURI().toString());
+		image = new Image(getClass().getClassLoader().getResourceAsStream("7.png"));
 		imageView_7.setImage(image);
-		file = new File("res/avatars/8.png");
-		image = new Image(file.toURI().toString());
+		image = new Image(getClass().getClassLoader().getResourceAsStream("8.png"));
 		imageView_8.setImage(image);
-		file = new File("res/avatars/9.png");
-		image = new Image(file.toURI().toString());
+		image = new Image(getClass().getClassLoader().getResourceAsStream("9.png"));
 		imageView_9.setImage(image);
-		file = new File("res/avatars/10.png");
-		image = new Image(file.toURI().toString());
+		image = new Image(getClass().getClassLoader().getResourceAsStream("10.png"));
 		imageView_10.setImage(image);
-		file = new File("res/avatars/11.png");
-		image = new Image(file.toURI().toString());
+		image = new Image(getClass().getClassLoader().getResourceAsStream("11.png"));
 		imageView_11.setImage(image);
-		file = new File("res/avatars/12.png");
-		image = new Image(file.toURI().toString());
+		image = new Image(getClass().getClassLoader().getResourceAsStream("12.png"));
 		imageView_12.setImage(image);
 	}
 	/**

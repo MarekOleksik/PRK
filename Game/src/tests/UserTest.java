@@ -1,8 +1,9 @@
-package application;
+package tests;
 
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
+import application.User;
 /**
 * Klasa testująca klasę użytkownika.
 * @author Krzysztof Jagodziński

@@ -1,6 +1,5 @@
 package controllers;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -66,8 +65,7 @@ public class UserController implements Initializable {
 	public void initialize(URL url, ResourceBundle rb) {
 		fxmlController = this;
 		picID = "no-avatar.png";
-		File file = new File("res/avatars/" + picID);
-		Image image = new Image(file.toURI().toString());
+		Image image = new Image(getClass().getClassLoader().getResourceAsStream(picID));
 		picIDImageView.setImage(image);
 		
 	}
@@ -93,7 +91,7 @@ public class UserController implements Initializable {
 
 		try {
 
-			application.ViewLoader<BorderPane, GameController> viewLoader = new application.ViewLoader<>("/FXML_Files/Game.fxml");
+			application.ViewLoader<BorderPane, GameController> viewLoader = new application.ViewLoader<>("/fxml_files/Game.fxml");
 			if (!userTextField.getText().equals("") && !userTextField.getText().equals("Gracz biały") && !userTextField.getText().equals("Gracz czerwony")) {
 				userName = userTextField.getText();
 			} else {
@@ -140,6 +138,8 @@ public class UserController implements Initializable {
 			primaryStage.hide();
 
 		} catch (Exception e) {
+			if (AlertBox.showAndWait(AlertType.ERROR, "WARCABY", "Błędny adres serwera?")
+  					.orElse(ButtonType.CANCEL) == ButtonType.OK);
 			e.printStackTrace();
 		}
 	}
@@ -151,7 +151,7 @@ public class UserController implements Initializable {
 	@FXML
 	void picID_MousePressed(MouseEvent event) {
 		try {
-			application.ViewLoader<AnchorPane, AvatarController> viewLoader = new application.ViewLoader<>("/FXML_Files/Avatar.fxml");
+			application.ViewLoader<AnchorPane, AvatarController> viewLoader = new application.ViewLoader<>("/fxml_files/Avatar.fxml");
 			AnchorPane anchorPane = viewLoader.getLayout();
 			Stage stage = new Stage();
 			Scene scene = new Scene(anchorPane);
